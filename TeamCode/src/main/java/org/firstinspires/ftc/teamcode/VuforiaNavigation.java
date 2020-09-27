@@ -24,13 +24,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 /**
- * This 2020-2021 OpMode illustrates the basics of using the Vuforia localizer to determine
- * positioning and orientation of robot on the ULTIMATE GOAL FTC field.
- * The code is structured as a LinearOpMode
- *
- * When images are located, Vuforia is able to determine the position and orientation of the
- * image relative to the camera.  This sample code then combines that information with a
- * knowledge of where the target images are on the field, to determine the location of the camera.
  *
  * From the Audience perspective, the Red Alliance station is on the right and the
  * Blue Alliance Station is on the left.
@@ -51,13 +44,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
+
  */
 
 
 @TeleOp(name="ULTIMATEGOAL Vuforia Nav", group ="Concept")
-@Disabled
+//@Disabled
 public class VuforiaNavigation extends LinearOpMode {
 
 
