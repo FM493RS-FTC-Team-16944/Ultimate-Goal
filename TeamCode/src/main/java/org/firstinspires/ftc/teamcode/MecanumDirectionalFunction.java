@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 /*
-This algorithm is used to simplify programming for mecanum drivetrain
+This algorithm is used to simplify programming for mecanum drivetrain is this working.
 by taking as input the x and y directions and any rotational motion,
 and returning the motor powers. Usage:
 
