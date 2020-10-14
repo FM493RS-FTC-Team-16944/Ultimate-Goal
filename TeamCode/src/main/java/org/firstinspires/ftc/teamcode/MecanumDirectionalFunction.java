@@ -21,7 +21,7 @@ private double[] powers = new double[4];
 
     public void Calculation(double xPower, double yPower, double rotPower)  {
 
-        powers[0] = (yPower - xPower - rotPower);           //Front Left Motor Power
+        powers[0] = (yPower - xPower - rotPower);           //Front Left Motor Powers
         powers[1] = (- yPower - xPower + rotPower);         //Back Left Motor power
         powers[2] = (yPower + xPower + rotPower);           //Front Right Motor Power
         powers[3] = (yPower - xPower + rotPower);           //Back Right Motor Power
