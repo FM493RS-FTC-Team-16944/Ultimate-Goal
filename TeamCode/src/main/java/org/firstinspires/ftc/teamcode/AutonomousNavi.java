@@ -33,21 +33,29 @@ public class AutonomousNavi extends LinearOpMode {
 
                                  //Place Code Here
     MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-    m.Calculation(0, 1, 0);                  //Calculate
+    m.Calculation(0, 1, 0);                              //Calculate
     FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
     BackLeftDrive.setPower(m.GetBackLeftPower());
     FrontRightDrive.setPower(m.GetFrontRightPower());
     BackRightDrive.setPower(m.GetBackRightPower());
-    wait(1000)
+
+
+    wait(1000);                                                            //Adjust forward Movement
+
+
         MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-    n.Calculation(1, 1, 0);                  //Calculate
-    FrontLeftDrive.setPower(n.GetFrontLeftPower());                              //Set Motor powers
+    n.Calculation(-1, 0, 0);                                 //Calculate
+    FrontLeftDrive.setPower(n.GetFrontLeftPower());                                 //Set Motor powers
     BackLeftDrive.setPower(n.GetBackLeftPower());
     FrontRightDrive.setPower(n.GetFrontRightPower());
     BackRightDrive.setPower(n.GetBackRightPower());
-    wait(4000)
+
+
+    wait(4000);                                                             //Adjust Sideways Movement
+
+
     MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-    d.Calculation(0, 0, 0);                  //Calculate
+    d.Calculation(0, 0, 0);                              //Calculate
     FrontLeftDrive.setPower(d.GetFrontLeftPower());                              //Set Motor powers
     BackLeftDrive.setPower(d.GetBackLeftPower());
     FrontRightDrive.setPower(d.GetFrontRightPower());
