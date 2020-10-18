@@ -33,20 +33,25 @@ public class AutonomousNavi extends LinearOpMode {
 
                                  //Place Code Here
     MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-    m.Calculation(0, 1, 1);                  //Calculate
-    FrontLeftDrive.setPower(m.GetFrontLeftPower(1));                              //Set Motor powers
-    BackLeftDrive.setPower(m.GetBackLeftPower(1));
-    FrontRightDrive.setPower(m.GetFrontRightPower(1));
-    BackRightDrive.setPower(m.GetBackRightPower(1));
-    idle(1s)
-        MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-    d.Calculation(4, 0, 1);                  //Calculate
-    FrontLeftDrive.setPower(m.GetFrontLeftPower(1));                              //Set Motor powers
-    BackLeftDrive.setPower(m.GetBackLeftPower(0));
-    FrontRightDrive.setPower(m.GetFrontRightPower(0));
-    BackRightDrive.setPower(m.GetBackRightPower(1));
-
-
+    m.Calculation(0, 1, 0);                  //Calculate
+    FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
+    BackLeftDrive.setPower(m.GetBackLeftPower());
+    FrontRightDrive.setPower(m.GetFrontRightPower());
+    BackRightDrive.setPower(m.GetBackRightPower());
+    wait(1000)
+        MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+    n.Calculation(1, 1, 0);                  //Calculate
+    FrontLeftDrive.setPower(n.GetFrontLeftPower());                              //Set Motor powers
+    BackLeftDrive.setPower(n.GetBackLeftPower());
+    FrontRightDrive.setPower(n.GetFrontRightPower());
+    BackRightDrive.setPower(n.GetBackRightPower());
+    wait(4000)
+    MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+    d.Calculation(0, 0, 0);                  //Calculate
+    FrontLeftDrive.setPower(d.GetFrontLeftPower());                              //Set Motor powers
+    BackLeftDrive.setPower(d.GetBackLeftPower());
+    FrontRightDrive.setPower(d.GetFrontRightPower());
+    BackRightDrive.setPower(d.GetBackRightPower());
 
 
 
