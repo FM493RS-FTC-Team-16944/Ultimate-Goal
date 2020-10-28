@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous(name="AutoNavi", group="Autonomous")
-//@disabledsfsdfsf
+//@disabled
 public class AutonomousNavi extends LinearOpMode {
 
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive;
