@@ -1,23 +1,31 @@
 package org.firstinspires.ftc.teamcode;
 
-        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import java.util.List;
-        import org.firstinspires.ftc.robotcore.external.ClassFactory;
-        import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-        import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-        import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-        import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import java.util.List;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 
 
-@TeleOp(name = "Tensorflow Ring Detection", group = "Concept")
+@Autonomous(name = "AutonomousNaviTf", group = "Concept")
 //@Disabled
-public class TensorflowRingDetection extends LinearOpMode {
+public class AutonomousNaviTf extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
+
+
+    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive;
+    double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
 
 
     private static final String VUFORIA_KEY =
@@ -39,6 +47,16 @@ public class TensorflowRingDetection extends LinearOpMode {
     public void runOpMode() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
+
+        FrontLeftDrive = hardwareMap.dcMotor.get("FrontLeftDrive");
+        FrontRightDrive = hardwareMap.dcMotor.get("FrontRightDrive");
+        BackLeftDrive = hardwareMap.dcMotor.get("BackLeftDrive");
+        BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
+
+        telemetry.addData("Mode", "waiting");
+        telemetry.update();
+
+
         initVuforia();
         initTfod();
 
@@ -46,6 +64,7 @@ public class TensorflowRingDetection extends LinearOpMode {
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
+
         if (tfod != null) {
             tfod.activate();
 
@@ -67,6 +86,8 @@ public class TensorflowRingDetection extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
+
+
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -86,6 +107,57 @@ public class TensorflowRingDetection extends LinearOpMode {
                         telemetry.update();
                     }
                 }
+
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                while (updatedRecognitions == null){
+
+                    MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+                    n.Calculation(-0.5, 0, 0);                                 //Calculate
+                    FrontLeftDrive.setPower(n.GetFrontLeftPower());                                 //Set Motor powers
+                    BackLeftDrive.setPower(n.GetBackLeftPower());
+                    FrontRightDrive.setPower(n.GetFrontRightPower());
+                    BackRightDrive.setPower(n.GetBackRightPower());
+
+                    telemetry.addLine("4");
+                    telemetry.update();
+
+                    //wait(4000);                                                             //Adjust Sideways Movement
+
+                    sleep(1000);
+
+                    telemetry.addLine("5");
+                    telemetry.update();
+
+                    MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+                    d.Calculation(0, 0, 0);                              //Calculate
+                    FrontLeftDrive.setPower(d.GetFrontLeftPower());                              //Set Motor powers
+                    BackLeftDrive.setPower(d.GetBackLeftPower());
+                    FrontRightDrive.setPower(d.GetFrontRightPower());
+                    BackRightDrive.setPower(d.GetBackRightPower());
+
+                }
+
+                if (tfod != null) {
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                        // step through the list of recognitions and display boundary info.
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+                        }
+                        telemetry.update();
+                    }
+                }
+
+                idle();
             }
         }
 
