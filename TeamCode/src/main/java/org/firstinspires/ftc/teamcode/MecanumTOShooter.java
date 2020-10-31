@@ -36,7 +36,7 @@ public class MecanumTOShooter extends LinearOpMode {
             //Start of Drive Code
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
-            double rx = gamepad1.right_stick_x;
+            double rx = -gamepad1.right_stick_x;
 
             FLPower = -(y - x - rx);
             BLPower = -(- y - x + rx);
