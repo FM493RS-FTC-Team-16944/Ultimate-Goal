@@ -10,6 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class MecanumTOShooter extends LinearOpMode {
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter;
     double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
+    float LaunchPower;
+    boolean AutoOn = false;
+    boolean PreviousState = false;
+    boolean LeftBumper;
 
     // called when init button is  pressed.
     @Override
@@ -70,7 +74,24 @@ public class MecanumTOShooter extends LinearOpMode {
             //End of drive Code
 
             //Start of Shooter Code
-            float Power =  gamepad1.left_trigger;
+
+
+            LeftBumper = gamepad1.left_bumper;
+
+            if (LeftBumper == true&&LeftBumper!=PreviousState)
+                AutoOn =  !AutoOn;
+
+            if (AutoOn==true) {
+                LaunchPower = 1;
+            } else {
+                LaunchPower = 0;
+            }
+
+            if(gamepad1.left_trigger != 0)
+                LaunchPower =  gamepad1.left_trigger;
+
+
+            PreviousState = LeftBumper;
 
             //End of Shooter Code
 
@@ -79,8 +100,8 @@ public class MecanumTOShooter extends LinearOpMode {
             BackLeftDrive.setPower(-BLPower);
             FrontRightDrive.setPower(-FRPower);
             BackRightDrive.setPower(-BRPower);
-            RightShooter.setPower(-Power);
-            LeftShooter.setPower(Power);
+            RightShooter.setPower(-LaunchPower);
+            LeftShooter.setPower(LaunchPower);
 
 
             //End of code
