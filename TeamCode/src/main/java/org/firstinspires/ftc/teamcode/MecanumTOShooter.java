@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-@TeleOp(name="MecanumTeleOp", group="Driver")
+@TeleOp(name="MecanumTOShooter", group="Driver")
 //@Disabled
-public class MecanumTeleOp extends LinearOpMode {
-    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive;
+public class MecanumTOShooter extends LinearOpMode {
+    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter;
     double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
 
     // called when init button is  pressed.
@@ -19,6 +19,9 @@ public class MecanumTeleOp extends LinearOpMode {
         FrontRightDrive = hardwareMap.dcMotor.get("FrontRightDrive");
         BackLeftDrive = hardwareMap.dcMotor.get("BackLeftDrive");
         BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
+        LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
+        RightShooter = hardwareMap.dcMotor.get("RightShooter");
+
 
         telemetry.addData("Mode", "waiting");
         telemetry.update();
@@ -29,6 +32,8 @@ public class MecanumTeleOp extends LinearOpMode {
 
         while (opModeIsActive())
         {
+
+            //Start of Drive Code
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
@@ -62,12 +67,23 @@ public class MecanumTeleOp extends LinearOpMode {
             } else {
                 telemetry.addData("PowerScaling Coeficcient:", "N/A");
             }
+            //End of drive Code
 
+            //Start of Shooter Code
+            float Power =  gamepad1.left_trigger;
+
+            //End of Shooter Code
+
+            //Motor Power Assignment
             FrontLeftDrive.setPower(-FLPower);
             BackLeftDrive.setPower(-BLPower);
             FrontRightDrive.setPower(-FRPower);
             BackRightDrive.setPower(-BRPower);
+            RightShooter.setPower(-Power);
+            LeftShooter.setPower(Power);
 
+
+            //End of code
             idle();
         }
     }
