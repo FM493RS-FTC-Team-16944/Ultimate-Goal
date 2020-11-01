@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -11,8 +12,9 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class MecanumTOShooter extends LinearOpMode {
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase;
+    TouchSensor Touch;
     Servo Gripper;
-    double   FLPower, FRPower, BLPower, BRPower;
+    double   FLPower, FRPower, BLPower, BRPower, ConstRes;
     float LaunchPower;
     boolean LeftBumper, buttonA;
     boolean AutoOn = false;
@@ -27,6 +29,7 @@ public class MecanumTOShooter extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException
     {
+       //Hardware Mapping
         FrontLeftDrive = hardwareMap.dcMotor.get("FrontLeftDrive");
         FrontRightDrive = hardwareMap.dcMotor.get("FrontRightDrive");
         BackLeftDrive = hardwareMap.dcMotor.get("BackLeftDrive");
@@ -35,6 +38,7 @@ public class MecanumTOShooter extends LinearOpMode {
         RightShooter = hardwareMap.dcMotor.get("RightShooter");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
         Gripper = hardwareMap.servo.get("Gripper");
+        Touch = hardwareMap.touchSensor.get("Touch");
 
 
         telemetry.addData("Mode", "waiting");
@@ -116,6 +120,12 @@ public class MecanumTOShooter extends LinearOpMode {
             if (gamepad1.dpad_up)
                 ArmPower = -0.4;
 
+            if(Touch.isPressed())
+                ConstRes = 0.1;
+            else
+                ConstRes = 0;
+
+            ArmPower = ArmPower + ConstRes;
 
             buttonA = gamepad1.a;
 
@@ -140,7 +150,7 @@ public class MecanumTOShooter extends LinearOpMode {
             RightShooter.setPower(-LaunchPower);
             LeftShooter.setPower(LaunchPower);
             ArmBase.setPower(ArmPower);
-            Gripper.setPosition(Range.clip(GripStregnth, 0, 1));
+            //Gripper.setPosition(Range.clip(GripStregnth, 0, 1));
             //End of code
             idle();
         }
