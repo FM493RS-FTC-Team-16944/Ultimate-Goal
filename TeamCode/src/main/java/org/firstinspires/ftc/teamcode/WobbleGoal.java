@@ -54,7 +54,7 @@ public class WobbleGoal extends LinearOpMode {
         FrontRightDrive.setPower(m.GetFrontRightPower());
         BackRightDrive.setPower(m.GetBackRightPower());
 
-        wait(4000);                                                            //Adjust forward Movement
+        wait(1000);                                                            //Adjust forward Movement
 
 
         MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
@@ -65,27 +65,10 @@ public class WobbleGoal extends LinearOpMode {
         BackRightDrive.setPower(n.GetBackRightPower());
 
 
-        wait(1000);     //Adjust Sideways Movement
+        wait(5000);     //Adjust Sideways Movement
 
 
-        //Place Code Here
-        MecanumDirectionalFunction o = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        m.Calculation(0, 1, 0);                              //Calculate
-        FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(o.GetBackLeftPower());
-        FrontRightDrive.setPower(o.GetFrontRightPower());
-        BackRightDrive.setPower(o.GetBackRightPower());
 
-
-        wait(2000);                                                            //Adjust forward Movement
-
-
-        MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        d.Calculation(0, 0, 0);                              //Calculate
-        FrontLeftDrive.setPower(d.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(d.GetBackLeftPower());
-        FrontRightDrive.setPower(d.GetFrontRightPower());
-        BackRightDrive.setPower(d.GetBackRightPower());
 
 
 
