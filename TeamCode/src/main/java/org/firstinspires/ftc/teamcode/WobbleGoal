@@ -22,6 +22,11 @@ public class WobbleGoal extends LinearOpMode {
         FrontRightDrive = hardwareMap.dcMotor.get("FrontRightDrive");
         BackLeftDrive = hardwareMap.dcMotor.get("BackLeftDrive");
         BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
+        LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
+        RightShooter = hardwareMap.dcMotor.get("RightShooter");
+        ArmBase = hardwareMap.dcMotor.get("ArmBase");
+        Gripper = hardwareMap.servo.get("Gripper");
+        Touch = hardwareMap.touchSensor.get("Touch");
 
         telemetry.addData("Mode", "waiting");
         telemetry.update();
