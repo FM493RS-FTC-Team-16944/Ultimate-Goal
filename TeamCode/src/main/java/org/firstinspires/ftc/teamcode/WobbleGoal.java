@@ -40,10 +40,12 @@ public class WobbleGoal extends LinearOpMode {
         //Pick Up Goal
         Gripper.setPosition(Range.clip(0.5, 0, 1));
         ArmBase.setPower(0.3);
-        sleep(500);
+        sleep(600);
+        ArmBase.setPower(-0.1);
+        sleep(1000);
         Gripper.setPosition(Range.clip(0,0,1));
         ArmBase.setPower(-0.4);
-        sleep(500);
+        sleep(1000);
         ArmBase.setPower(-0.1);
 
         //Place Code Here
@@ -54,7 +56,7 @@ public class WobbleGoal extends LinearOpMode {
         FrontRightDrive.setPower(m.GetFrontRightPower());
         BackRightDrive.setPower(m.GetBackRightPower());
 
-        sleep(4000);                                                            //Adjust forward Movement
+        sleep(1000);                                                            //Adjust forward Movement
 
 
         MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
@@ -65,27 +67,10 @@ public class WobbleGoal extends LinearOpMode {
         BackRightDrive.setPower(n.GetBackRightPower());
 
 
-        sleep(1000);     //Adjust Sideways Movement
+        sleep(5000);     //Adjust Sideways Movement
 
 
-        //Place Code Here
-        MecanumDirectionalFunction o = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        m.Calculation(0, 1, 0);                              //Calculate
-        FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(o.GetBackLeftPower());
-        FrontRightDrive.setPower(o.GetFrontRightPower());
-        BackRightDrive.setPower(o.GetBackRightPower());
 
-
-        sleep(2000);                                                            //Adjust forward Movement
-
-
-        MecanumDirectionalFunction d = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        d.Calculation(0, 0, 0);                              //Calculate
-        FrontLeftDrive.setPower(d.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(d.GetBackLeftPower());
-        FrontRightDrive.setPower(d.GetFrontRightPower());
-        BackRightDrive.setPower(d.GetBackRightPower());
 
 
 
