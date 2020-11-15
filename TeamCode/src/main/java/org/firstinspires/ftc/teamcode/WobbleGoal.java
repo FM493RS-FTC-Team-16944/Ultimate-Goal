@@ -61,8 +61,16 @@ public class WobbleGoal extends LinearOpMode {
         BackLeftDrive.setPower(m.GetBackLeftPower());
         FrontRightDrive.setPower(m.GetFrontRightPower());
         BackRightDrive.setPower(m.GetBackRightPower());
-        sleep(1000); 
-        
+        sleep(1000);
+
+        MecanumDirectionalFunction o = new MecanumDirectionalFunction();
+        o.Calculation(0, 0, 0);                              //Calculate
+        FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(o.GetBackLeftPower());
+        FrontRightDrive.setPower(o.GetFrontRightPower());
+        BackRightDrive.setPower(o.GetBackRightPower());
+        sleep(200);
+
         MecanumDirectionalFunction x = new MecanumDirectionalFunction();
          x.Calculation(-0.75, 0, 0);                              //Calculate
         FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
