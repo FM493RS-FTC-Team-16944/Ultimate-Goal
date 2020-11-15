@@ -45,6 +45,7 @@ public class WobbleGoal extends LinearOpMode {
         ArmBase.setPower(-0.1);
         sleep(1000);
         Gripper.setPosition(Range.clip(0,0,1));
+        sleep(2000);
         ArmBase.setPower(-0.4);
         sleep(1000);
         ArmBase.setPower(-0.1);
