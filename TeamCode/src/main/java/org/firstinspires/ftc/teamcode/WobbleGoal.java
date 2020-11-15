@@ -49,7 +49,7 @@ public class WobbleGoal extends LinearOpMode {
         ArmBase.setPower(-0.1);
 
         //Place Code Here
-        MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+        /*MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
         m.Calculation(0, 1, 0);                              //Calculate
         FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(m.GetBackLeftPower());
@@ -69,6 +69,7 @@ public class WobbleGoal extends LinearOpMode {
 
         sleep(5000);     //Adjust Sideways Movement
 
+         */
 
 
 
