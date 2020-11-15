@@ -54,29 +54,16 @@ public class WobbleGoal extends LinearOpMode {
         sleep(400);
         ArmBase.setPower(-0.1);
         Gripper.setPosition(Range.clip(0,0,1));
-
-        //Place Code Here
-        /*MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        m.Calculation(0, 1, 0);                              //Calculate
+        
+        
+        m.Calculation(0, -0.5, 0);                              //Calculate
         FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(m.GetBackLeftPower());
         FrontRightDrive.setPower(m.GetFrontRightPower());
         BackRightDrive.setPower(m.GetBackRightPower());
+        sleep(200); 
 
-        sleep(1000);                                                            //Adjust forward Movement
-
-
-        MecanumDirectionalFunction n = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-        n.Calculation(1, 0, 0);                                 //Calculate
-        FrontLeftDrive.setPower(n.GetFrontLeftPower());                                 //Set Motor powers
-        BackLeftDrive.setPower(n.GetBackLeftPower());
-        FrontRightDrive.setPower(n.GetFrontRightPower());
-        BackRightDrive.setPower(n.GetBackRightPower());
-
-
-        sleep(5000);     //Adjust Sideways Movement
-
-         */
+        
 
 
 
