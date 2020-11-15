@@ -53,6 +53,7 @@ public class WobbleGoal extends LinearOpMode {
         Gripper.setPosition(Range.clip(0,0,1));
         sleep(400);
         ArmBase.setPower(-0.1);
+        Gripper.setPosition(Range.clip(0,0,1));
 
         //Place Code Here
         /*MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
