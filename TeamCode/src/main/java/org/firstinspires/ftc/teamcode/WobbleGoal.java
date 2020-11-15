@@ -61,7 +61,7 @@ public class WobbleGoal extends LinearOpMode {
         BackLeftDrive.setPower(m.GetBackLeftPower());
         FrontRightDrive.setPower(m.GetFrontRightPower());
         BackRightDrive.setPower(m.GetBackRightPower());
-        sleep(200); 
+        sleep(400); 
 
         
 
