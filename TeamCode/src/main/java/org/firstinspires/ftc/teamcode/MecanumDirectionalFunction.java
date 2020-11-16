@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 
 /*
-This algorithm is used to simplify programming for mecanum drivetrain is this working.
-by taking as input the x and y directions and any rotational motion,
+This algorithm is used to simplify programming for mecanum drivetrain is this working,
+created by the FM493RS, by taking as input the x and y directions and any rotational motion,
 and returning the motor powers. Usage:
 
     MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
@@ -21,10 +21,13 @@ private double[] powers = new double[4];
 
     public void Calculation(double xPower, double yPower, double rotPower)  {
 
-        powers[0] = (-yPower + xPower - rotPower);           //Front Left Motor Powers
-        powers[1] = (+ yPower + xPower + rotPower);         //Back Left Motor power
-        powers[2] = (-yPower - xPower + rotPower);           //Front Right Motor Power
-        powers[3] = (-yPower + xPower + rotPower);           //Back Right Motor Power
+
+        yPower = -yPower;
+
+        powers[0] = (yPower - xPower - rotPower);           //Front Left Motor Powers
+        powers[1] = (- yPower - xPower + rotPower);         //Back Left Motor power
+        powers[2] = (yPower + xPower + rotPower);           //Front Right Motor Power
+        powers[3] = (yPower - xPower + rotPower);           //Back Right Motor Power
 
 
         //Scale all motor powers to ensure that movement and directionality are all maintained
