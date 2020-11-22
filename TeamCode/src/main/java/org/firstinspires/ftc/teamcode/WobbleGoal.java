@@ -99,7 +99,7 @@ public class WobbleGoal extends LinearOpMode {
 
         waitForStart();
 
-        /*
+
 
         //Pick Up Goal
         Gripper.setPosition(Range.clip(0.5, 0, 1));
@@ -145,16 +145,16 @@ public class WobbleGoal extends LinearOpMode {
         BackRightDrive.setPower(O.GetBackRightPower());
         sleep(400);
 
-         */
 
 
 
 
 
-        //Tensor flow start:
+
+        /**Tensor flow start: */
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
-        while ( j < 5000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time
+        while ( j < 5000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -174,22 +174,21 @@ public class WobbleGoal extends LinearOpMode {
 
                         if (recognition.getLabel() == "Single") {               //Takes the string and determines what type of object it is
                             Path = 1;
-                            break;
+                            break;                                              //Exits the loop early if one ring is detected
                         } else if (recognition.getLabel() == "Quad") {
                             Path = 2;
-                            break;
-                        } else {
-                            Path = 0;
+                            break;                                             //Exits the loop once the stack of rings is detected
                         }
                     }
-                    telemetry.addData("Count:", j);
+
+                    telemetry.addData("Count: 5,000,000>", j);
                     telemetry.update();
 
 
                 }
             }
 
-            j++;
+            j++;                                                                //Increases Loop Count
         }
 
 
@@ -201,7 +200,7 @@ public class WobbleGoal extends LinearOpMode {
         telemetry.addData("Path", Path);
         telemetry.update();
 
-        //Tensor flow end
+        /**Tensor flow end */
 
 
         sleep(10000);
