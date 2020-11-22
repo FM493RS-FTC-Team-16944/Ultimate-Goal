@@ -203,6 +203,13 @@ public class WobbleGoal extends LinearOpMode {
         /**Tensor flow end */
 
 
+        if (Path==0){
+
+        } else if (Path == 1) {
+
+        } else if (Path == 2) {
+
+        }
         sleep(10000);
 
 
