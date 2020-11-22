@@ -204,10 +204,45 @@ public class WobbleGoal extends LinearOpMode {
 
 
         if (Path==0){
+            FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(r.GetBackLeftPower());
+            FrontRightDrive.setPower(r.GetFrontRightPower());
+            BackRightDrive.setPower(r.GetBackRightPower());
+            sleep(400);
+
+            FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(x.GetBackLeftPower());
+            FrontRightDrive.setPower(x.GetFrontRightPower());
+            BackRightDrive.setPower(x.GetBackRightPower());
+            sleep(750);
+
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+            sleep(400);
 
         } else if (Path == 1) {
 
         } else if (Path == 2) {
+            FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(r.GetBackLeftPower());
+            FrontRightDrive.setPower(r.GetFrontRightPower());
+            BackRightDrive.setPower(r.GetBackRightPower());
+            sleep(400);
+
+            FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(x.GetBackLeftPower());
+            FrontRightDrive.setPower(x.GetFrontRightPower());
+            BackRightDrive.setPower(x.GetBackRightPower());
+            sleep(1500);
+
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+            sleep(400);
+
 
         }
         sleep(10000);
