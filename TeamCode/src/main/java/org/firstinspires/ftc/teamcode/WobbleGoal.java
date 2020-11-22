@@ -46,6 +46,7 @@ public class WobbleGoal extends LinearOpMode {
     //motion init
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase;
     Servo Gripper;
+    long Motion;
     double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
     //end of motion init
 
@@ -98,6 +99,7 @@ public class WobbleGoal extends LinearOpMode {
 
         waitForStart();
 
+        /*
 
         //Pick Up Goal
         Gripper.setPosition(Range.clip(0.5, 0, 1));
@@ -117,21 +119,7 @@ public class WobbleGoal extends LinearOpMode {
         ArmBase.setPower(-0.1);
         Gripper.setPosition(Range.clip(0,0,1));
 
-        MecanumDirectionalFunction m = new MecanumDirectionalFunction();
-        m.Calculation(0, -0.75, 0);                              //Calculate
-        FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(m.GetBackLeftPower());
-        FrontRightDrive.setPower(m.GetFrontRightPower());
-        BackRightDrive.setPower(m.GetBackRightPower());
-        sleep(1000);
 
-        MecanumDirectionalFunction o = new MecanumDirectionalFunction();
-        o.Calculation(0, 0, 0);                              //Calculate
-        FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(o.GetBackLeftPower());
-        FrontRightDrive.setPower(o.GetFrontRightPower());
-        BackRightDrive.setPower(o.GetBackRightPower());
-        sleep(1000);
 
         MecanumDirectionalFunction r = new MecanumDirectionalFunction();
         r.Calculation(0, 0, 0.4);                              //Calculate
@@ -147,7 +135,17 @@ public class WobbleGoal extends LinearOpMode {
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());
         BackRightDrive.setPower(x.GetBackRightPower());
-        sleep(800); 
+        sleep(750);
+
+        MecanumDirectionalFunction O = new MecanumDirectionalFunction();
+        O.Calculation(0, 0, 0);                              //Calculate
+        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(O.GetBackLeftPower());
+        FrontRightDrive.setPower(O.GetFrontRightPower());
+        BackRightDrive.setPower(O.GetBackRightPower());
+        sleep(400);
+
+         */
 
         //Tensor flow start:
         if (tfod != null) {
@@ -167,15 +165,32 @@ public class WobbleGoal extends LinearOpMode {
                             recognition.getRight(), recognition.getBottom());
                 }
                 telemetry.update();
+                if (updatedRecognitions.size()==1){
+                    Motion = 1;
+                } else if (i==2){
+                    Motion =2;
+                }else if (updatedRecognitions.size()==3){
+                    Motion =3;
+                }else if (updatedRecognitions.size()==4){
+                    Motion =4;
+                }else if (updatedRecognitions.size()==0){
+                    Motion =0;
+                }
+
             }
         }
 
         if (tfod != null) {
             tfod.shutdown();
         }
+
+        telemetry.addData("Path", Motion);
+        telemetry.update();
+        sleep((Motion*3000));
         //Tensor flow end
 
 
+        sleep(10000);
 
 
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.text.method.Touch;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,16 +13,18 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="MecanumTOShooter", group="Driver")
 //@Disabled
 public class MecanumTOShooter extends LinearOpMode {
-    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase;
-    TouchSensor Touch;
+    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase, Intake;
+    //TouchSensor Touch;
     Servo Gripper;
-    double   FLPower, FRPower, BLPower, BRPower, ConstRes;
+    double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
     float LaunchPower;
-    boolean LeftBumper, buttonA;
+    boolean LeftBumper, buttonA, RightBumper;
     boolean AutoOn = false;
     boolean AutoSwitch = false;
+    boolean AutoIn = false;
     boolean PreviousBumper = false;
     boolean PreviousbuttonA = false;
+    boolean PreviousIntake = false;
     float GripStregnth = 0;
     double ArmPower = 0;
 
@@ -36,9 +40,10 @@ public class MecanumTOShooter extends LinearOpMode {
         BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
         LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
         RightShooter = hardwareMap.dcMotor.get("RightShooter");
+        Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
         Gripper = hardwareMap.servo.get("Gripper");
-        Touch = hardwareMap.touchSensor.get("Touch");
+        //Touch = hardwareMap.touchSensor.get("Touch");
 
 
         telemetry.addData("Mode", "waiting");
@@ -89,7 +94,6 @@ public class MecanumTOShooter extends LinearOpMode {
 
             //Start of Shooter Code
 
-
             LeftBumper = gamepad1.left_bumper;
 
             if (LeftBumper == true&&LeftBumper!=PreviousBumper)
@@ -120,10 +124,13 @@ public class MecanumTOShooter extends LinearOpMode {
             if (gamepad1.dpad_up)
                 ArmPower = -0.4;
 
+            /*
             if(Touch.isPressed())
                 ConstRes = 0.1;
             else
                 ConstRes = 0;
+
+             */
 
             ArmPower = ArmPower + ConstRes;
 
@@ -142,6 +149,26 @@ public class MecanumTOShooter extends LinearOpMode {
 
             //End of Gripper Code
 
+            //Start of Intake Code
+
+            RightBumper = gamepad1.right_bumper;
+
+            if (RightBumper == true&&RightBumper!=PreviousIntake)
+                AutoIn =  !AutoIn;
+
+            if (AutoIn==true) {
+                IntakePower = -0.5;
+            } else {
+                IntakePower = 0;
+            }
+
+            if(gamepad1.right_trigger != 0)
+                IntakePower =  -gamepad1.right_trigger;
+
+            PreviousIntake = RightBumper;
+
+            //End of Intake Code
+
             //Motor Power Assignment
             FrontLeftDrive.setPower(FLPower);
             BackLeftDrive.setPower(BLPower);
@@ -149,6 +176,7 @@ public class MecanumTOShooter extends LinearOpMode {
             BackRightDrive.setPower(BRPower);
             RightShooter.setPower(-LaunchPower);
             LeftShooter.setPower(LaunchPower);
+            Intake.setPower(IntakePower);
             ArmBase.setPower(ArmPower);
             //Gripper.setPosition(Range.clip(GripStregnth, 0, 1));
             //End of code
