@@ -147,9 +147,13 @@ public class WobbleGoal extends LinearOpMode {
 
          */
 
-        int j;
-        for (j=0;j<10;j++) {
-            //Tensor flow start:
+
+        int Path = 10;
+
+
+        //Tensor flow start:
+        while (Path == 10) {
+
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -165,31 +169,30 @@ public class WobbleGoal extends LinearOpMode {
                                 recognition.getLeft(), recognition.getTop());
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
+                        if (recognition.getLabel() == "Single") {
+                            Path = 1;
+                        } else if (recognition.getLabel() == "Quad") {
+                            Path = 2;
+                        } else {
+                            Path = 0;
+                        }
                     }
                     telemetry.update();
-                    if (updatedRecognitions.size() == 1) {
-                        Motion = 1;
-                    } else if (i == 2) {
-                        Motion = 2;
-                    } else if (updatedRecognitions.size() == 3) {
-                        Motion = 3;
-                    } else if (updatedRecognitions.size() == 4) {
-                        Motion = 4;
-                    } else if (updatedRecognitions.size() == 0) {
-                        Motion = 0;
-                    }
+
 
                 }
             }
         }
 
+
+
         if (tfod != null) {
             tfod.shutdown();
         }
 
-        telemetry.addData("Path", Motion);
+        telemetry.addData("Path", Path);
         telemetry.update();
-        sleep((Motion*3000));
+        sleep((Path*3000));
         //Tensor flow end
 
 
