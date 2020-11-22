@@ -148,14 +148,16 @@ public class WobbleGoal extends LinearOpMode {
          */
 
 
-        int Path = 10;
+
 
 
         //Tensor flow start:
-        while (Path == 10) {
+        long j = 0;
+        int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
+        while ( j < 5000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time
 
             if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
+                // getUpdatedjRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
@@ -169,19 +171,25 @@ public class WobbleGoal extends LinearOpMode {
                                 recognition.getLeft(), recognition.getTop());
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
-                        if (recognition.getLabel() == "Single") {
+
+                        if (recognition.getLabel() == "Single") {               //Takes the string and determines what type of object it is
                             Path = 1;
+                            break;
                         } else if (recognition.getLabel() == "Quad") {
                             Path = 2;
+                            break;
                         } else {
                             Path = 0;
                         }
                     }
+                    telemetry.addData("Count:", j);
                     telemetry.update();
 
 
                 }
             }
+
+            j++;
         }
 
 
@@ -192,7 +200,7 @@ public class WobbleGoal extends LinearOpMode {
 
         telemetry.addData("Path", Path);
         telemetry.update();
-        sleep((Path*3000));
+
         //Tensor flow end
 
 
@@ -202,7 +210,7 @@ public class WobbleGoal extends LinearOpMode {
 
 
 
-        idle();
+
 
 
 
