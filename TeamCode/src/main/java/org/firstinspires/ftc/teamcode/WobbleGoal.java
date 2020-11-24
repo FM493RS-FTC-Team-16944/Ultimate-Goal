@@ -44,7 +44,7 @@ public class WobbleGoal extends LinearOpMode {
 
 
     //motion init
-    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase;
+    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, Intake, ArmBase;
     Servo Gripper;
     long Motion;
     double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
@@ -59,6 +59,7 @@ public class WobbleGoal extends LinearOpMode {
         BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
         LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
         RightShooter = hardwareMap.dcMotor.get("RightShooter");
+        Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
         Gripper = hardwareMap.servo.get("Gripper");
 
@@ -98,6 +99,7 @@ public class WobbleGoal extends LinearOpMode {
         // wait for start button.
 
         waitForStart();
+
 
 
 
@@ -242,7 +244,7 @@ public class WobbleGoal extends LinearOpMode {
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
             sleep(1000);
-            
+
             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(r.GetBackLeftPower());
             FrontRightDrive.setPower(r.GetFrontRightPower());
@@ -298,6 +300,7 @@ public class WobbleGoal extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
+
 
 
 
