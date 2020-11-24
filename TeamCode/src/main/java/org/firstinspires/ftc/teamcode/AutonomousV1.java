@@ -17,7 +17,7 @@ import java.util.List;
 
 @Autonomous(name="AutonomousV1", group="Autonomous")
 
-public class WobbleGoal extends LinearOpMode {
+public class AutonomousV1 extends LinearOpMode {
 
     //Tensorflow start init
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";

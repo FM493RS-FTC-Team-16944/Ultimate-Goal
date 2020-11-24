@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous(name="AutoNavi", group="Autonomous")
-//@disabled
+@Disabled
 public class AutonomousNavi extends LinearOpMode {
 
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive;
