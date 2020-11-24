@@ -50,6 +50,11 @@ public class AutoLaunch extends LinearOpMode {
         RightShooter.setPower(-1);
         Intake.setPower(-0.75);
 
+        sleep(5000);
+
+        LeftShooter.setPower(0);
+        RightShooter.setPower(0);
+        Intake.setPower(0);
 
     }
 }
