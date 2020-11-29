@@ -495,7 +495,15 @@ public class ArcmToSiA extends LinearOpMode {
 
             }
             //Autoalign Code end
-
+            int distance = 200; //random distance for rn
+            int fullDistance = distance + 50; //need to find out the distance from landing point to front of power shot goal 50 is just a placer
+            if(fullDistance <= 210) {
+                int rpmSPerct = (fullDistance / 216.74) * 100;
+            } else {
+                int rpmLPerct = (fullDistance / 404) * 100;
+            }
+            
+            
             //Motor Power Assignment
             FrontLeftDrive.setPower(FLPower);
             BackLeftDrive.setPower(BLPower);
