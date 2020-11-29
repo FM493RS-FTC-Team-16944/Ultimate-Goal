@@ -1,19 +1,30 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.text.method.Touch;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.Range;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,35 +34,28 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-/**
- *
- * From the Audience perspective, the Red Alliance station is on the right and the
- * Blue Alliance Station is on the left.
 
- * There are a total of five image targets for the ULTIMATE GOAL game.
- * Three of the targets are placed in the center of the Red Alliance, Audience (Front),
- * and Blue Alliance perimeter walls.
- * Two additional targets are placed on the perimeter wall, one in front of each Tower Goal.
- * Refer to the Field Setup manual for more specific location details
- *
- * A final calculation then uses the location of the camera on the robot to determine the
- * robot's location and orientation on the field.
- *
- * @see VuforiaLocalizer
- * @see VuforiaTrackableDefaultListener
- * see  ultimategoal/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
-
- */
-
-
-@TeleOp(name="VuforiaNavi", group ="Concept")
+@TeleOp(name="ARCM-TO-SIA", group="Driver")
 //@Disabled
-public class VuforiaNavigation extends LinearOpMode {
+public class ArcmToSiA extends LinearOpMode {
+    //Start of std init
+    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase, Intake;
+    //TouchSensor Touch;
+    Servo Gripper;
+    double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
+    float LaunchPower;
+    boolean LeftBumper, buttonX, RightBumper;
+    boolean AutoOn = false;
+    boolean AutoSwitch = false;
+    boolean AutoIn = false;
+    boolean PreviousBumper = false;
+    boolean PreviousbuttonX = false;
+    boolean PreviousIntake = false;
+    float GripStregnth = 0;
+    double ArmPower = 0;
+    //End of std Init
 
+    /** Start of Vuforia Init */
 
     // 1) Camera Source.  Valid choices are:  BACK (behind screen) or FRONT (selfie side)
     // 2) Phone Orientation. Choices are: PHONE_IS_PORTRAIT = true (portrait) or PHONE_IS_PORTRAIT = false (landscape)
@@ -80,8 +84,54 @@ public class VuforiaNavigation extends LinearOpMode {
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
+    /**End of vuforia Init*/
 
-    @Override public void runOpMode() {
+    //Start of IMU init
+    BNO055IMU imu;
+    Orientation             lastAngles = new Orientation();
+    double                  globalAngle, power = .30, correction;
+    //End of IMU init
+
+
+
+    // called when init button is  pressed.
+    @Override
+    public void runOpMode() throws InterruptedException
+    {
+        //Hardware Mapping
+        FrontLeftDrive = hardwareMap.dcMotor.get("FrontLeftDrive");
+        FrontRightDrive = hardwareMap.dcMotor.get("FrontRightDrive");
+        BackLeftDrive = hardwareMap.dcMotor.get("BackLeftDrive");
+        BackRightDrive = hardwareMap.dcMotor.get("BackRightDrive");
+        LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
+        RightShooter = hardwareMap.dcMotor.get("RightShooter");
+        Intake = hardwareMap.dcMotor.get("Intake");
+        ArmBase = hardwareMap.dcMotor.get("ArmBase");
+        Gripper = hardwareMap.servo.get("Gripper");
+        //Touch = hardwareMap.touchSensor.get("Touch");
+
+
+        telemetry.addData("Mode", "waiting");
+        telemetry.update();
+
+        //IMU Setup
+        BNO055IMU.Parameters Parameters = new BNO055IMU.Parameters();
+
+        Parameters.mode                = BNO055IMU.SensorMode.IMU;
+        Parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        Parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        Parameters.loggingEnabled      = false;
+
+        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+        // and named "imu".
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
+        imu.initialize(Parameters);
+
+        //End of IMU setup
+
+        /** Vuforia Setup */
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
 
@@ -201,14 +251,137 @@ public class VuforiaNavigation extends LinearOpMode {
         // CONSEQUENTLY do not put any driving commands in this loop.
         // To restore the normal opmode structure, just un-comment the following line:
 
+
+        /**End of Vuforia start */
+
+        // wait for start button.
+
         waitForStart();
 
-        // Note: To use the remote camera preview:
-        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
-        // Tap the preview window to receive a fresh image.
+        targetsUltimateGoal.activate();        //Activate vuforia
 
-        targetsUltimateGoal.activate();
-        while (!isStopRequested()) {
+        while (opModeIsActive())
+        {
+
+            //Start of Drive Code
+            double y = gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
+            double rx = -gamepad1.right_stick_x;
+
+            FLPower = (y - x - rx);
+            BLPower = (- y - x + rx);
+            FRPower = (y + x + rx);
+            BRPower = (y - x + rx);
+
+            telemetry.addData("Mode", "running");
+            telemetry.addData("stick", "  y=" + y + "  x=" + x);
+
+
+            if (Math.abs(FLPower) > 1 || Math.abs(BLPower) > 1 ||
+                    Math.abs(FRPower) > 1 || Math.abs(BRPower) > 1 ) {
+                // Find the largest power
+
+                double max = 0;
+                max = Math.max(Math.abs(FLPower), Math.abs(BLPower));
+                max = Math.max(Math.abs(FRPower), max);
+                max = Math.max(Math.abs(BRPower), max);
+
+                // Divide everything by max (it's positive so we don't need to worry
+                // about signs)
+                FLPower /= max;
+                BLPower /= max;
+                FRPower /= max;
+                BRPower /= max;
+
+                telemetry.addData("PowerScaling Coeficcient:", 1/max);
+            } else {
+                telemetry.addData("PowerScaling Coeficcient:", "N/A");
+            }
+            //End of drive Code
+
+            //Start of Shooter Code
+
+            LeftBumper = gamepad1.left_bumper;
+
+            if (LeftBumper == true&&LeftBumper!=PreviousBumper)
+                AutoOn =  !AutoOn;
+
+            if (AutoOn==true) {
+                LaunchPower = 1;
+            } else {
+                LaunchPower = 0;
+            }
+
+            if(gamepad1.left_trigger != 0)
+                LaunchPower =  gamepad1.left_trigger;
+
+            PreviousBumper = LeftBumper;
+
+            //End of Shooter Code
+
+            //Start of Gripper Code
+            buttonX = gamepad1.a;
+
+            if (gamepad1.x)                 //press X once wobble goal has been grabbed to counteract additional weight
+                ArmPower = -0.1;
+            else ArmPower = 0;
+
+            if (gamepad1.dpad_down)
+                ArmPower = 0.3;
+            if (gamepad1.dpad_up)
+                ArmPower = -0.4;
+
+            /*
+            if(Touch.isPressed())
+                ConstRes = 0.1;
+            else
+                ConstRes = 0;
+
+             */
+
+            ArmPower = ArmPower + ConstRes;
+
+            buttonX = gamepad1.x;
+
+            if (buttonX == true&&buttonX!=PreviousbuttonX)
+                AutoSwitch =  !AutoSwitch;
+
+            if (AutoSwitch==true) {
+                Gripper.setPosition(Range.clip(0, 0, 1));
+            } else {
+                Gripper.setPosition(Range.clip(0.5, 0, 1));
+            }
+
+            PreviousbuttonX = buttonX;
+
+            //End of Gripper Code
+
+            //Start of Intake Code
+
+            RightBumper = gamepad1.right_bumper;
+
+            if (RightBumper == true&&RightBumper!=PreviousIntake)
+                AutoIn =  !AutoIn;
+
+            if (AutoIn==true) {
+                IntakePower = -0.5;
+            } else {
+                IntakePower = 0;
+            }
+
+            if(gamepad1.right_trigger != 0)
+                IntakePower =  -gamepad1.right_trigger;
+
+            PreviousIntake = RightBumper;
+
+            //End of Intake Code
+
+            /**Vuforia Run */
+            double Xpos, Ypos, Zpos, Yaw;
+            Xpos = 0;
+            Ypos = 0;
+            Zpos = 0;
+            Yaw = 0;
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -227,24 +400,139 @@ public class VuforiaNavigation extends LinearOpMode {
                 }
             }
 
+
             // Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                         translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                Xpos = translation.get(0);
+                Ypos = translation.get(1);
+                Zpos = translation.get(2);
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                Yaw = rotation.thirdAngle;
             }
             else {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-        }
 
-        // Disable Tracking when we are done;
+
+            /**End of Vuforia Run */
+
+            //AutoAlign Code Start
+            if(gamepad1.a==true){
+                AutoAlign System = new AutoAlign();
+                System.Math(60,40,40, Xpos, Ypos, Zpos);
+                System.Orient(Yaw);
+                double TargetAngle = System.GetAngle() ;
+                telemetry.addData("TargetAngle", TargetAngle);
+                telemetry.addData("Current Angle",Yaw);
+                telemetry.update();
+
+
+                resetAngle();
+                TargetAngle = -Yaw+TargetAngle;
+
+                // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+                // clockwise (right).
+
+                if (TargetAngle < 0)
+                {   // turn right.
+
+                    MecanumDirectionalFunction R = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+                    R.Calculation(0, 0, +0.2);                  //Calculate
+                    FrontLeftDrive.setPower(R.GetFrontLeftPower());                              //Set Motor powers
+                    BackLeftDrive.setPower(R.GetBackLeftPower());
+                    FrontRightDrive.setPower(R.GetFrontRightPower());
+                    BackRightDrive.setPower(R.GetBackRightPower());
+                }
+                else if (TargetAngle > 0)
+                {   // turn left.
+                    MecanumDirectionalFunction L = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+                    L.Calculation(0, 0, -0.2);                  //Calculate
+                    FrontLeftDrive.setPower(L.GetFrontLeftPower());                              //Set Motor powers
+                    BackLeftDrive.setPower(L.GetBackLeftPower());
+                    FrontRightDrive.setPower(L.GetFrontRightPower());
+                    BackRightDrive.setPower(L.GetBackRightPower());
+                }
+                else return;
+
+                //telemetry.addData("Angle",getAngle());
+                //telemetry.update();
+
+                // rotate until turn is completed.
+                if (TargetAngle < 0)
+                {
+                    // On right turn we have to get off zero first.
+                    while (opModeIsActive() && getAngle() == 0) {}
+
+                    while (opModeIsActive() && getAngle() > TargetAngle) {}
+                }
+                else    // left turn.
+                    while (opModeIsActive() && getAngle() < TargetAngle) {}
+
+                // turn the motors off.
+
+                // wait for rotation to stop.
+                sleep(1000);
+
+                // reset angle tracking on new heading.
+                resetAngle();
+
+
+            }
+            //Autoalign Code end
+
+            //Motor Power Assignment
+            FrontLeftDrive.setPower(FLPower);
+            BackLeftDrive.setPower(BLPower);
+            FrontRightDrive.setPower(FRPower);
+            BackRightDrive.setPower(BRPower);
+            RightShooter.setPower(-LaunchPower);
+            LeftShooter.setPower(LaunchPower);
+            Intake.setPower(IntakePower);
+            ArmBase.setPower(ArmPower);
+            //Gripper.setPosition(Range.clip(GripStregnth, 0, 1));
+            //End of code
+            idle();
+        }
         targetsUltimateGoal.deactivate();
+
+    }
+
+
+    private double getAngle() {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
+}
+
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
     }
 }
