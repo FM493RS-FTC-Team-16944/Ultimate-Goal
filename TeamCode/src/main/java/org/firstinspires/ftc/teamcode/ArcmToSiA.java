@@ -478,6 +478,14 @@ public class ArcmToSiA extends LinearOpMode {
 
                 // turn the motors off.
 
+                MecanumDirectionalFunction o = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+                o.Calculation(0, 0, 0);                              //Calculate
+                FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
+                BackLeftDrive.setPower(o.GetBackLeftPower());
+                FrontRightDrive.setPower(o.GetFrontRightPower());
+                BackRightDrive.setPower(o.GetBackRightPower());
+
+
                 // wait for rotation to stop.
                 sleep(1000);
 
