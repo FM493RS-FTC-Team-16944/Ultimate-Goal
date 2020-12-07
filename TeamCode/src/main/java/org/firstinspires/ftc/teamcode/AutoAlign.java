@@ -30,6 +30,9 @@ public class AutoAlign {
     public double GetAngle(){
         return Angle;
     }
+    public Double GetGroundDist(){
+        return Di2tance;
+    }
 
     public double GetFrontLeftPower(){
         return powers[0];                         //Return the Front left motor power as calculated

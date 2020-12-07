@@ -105,7 +105,7 @@ public class AutonomousV1 extends LinearOpMode {
 
         //Pick Up Goal
         Gripper.setPosition(Range.clip(0.5, 0, 1));
-        sleep(2000);
+        sleep(1250);
         ArmBase.setPower(0.3);
         sleep(850);
         ArmBase.setPower(-0.1);
@@ -129,10 +129,10 @@ public class AutonomousV1 extends LinearOpMode {
         BackLeftDrive.setPower(r.GetBackLeftPower());
         FrontRightDrive.setPower(r.GetFrontRightPower());
         BackRightDrive.setPower(r.GetBackRightPower());
-        sleep(300);
+        sleep(200);
 
         MecanumDirectionalFunction x = new MecanumDirectionalFunction();
-         x.Calculation(1, 0, 0);                              //Calculate
+         x.Calculation(1, 0.15, 0);                              //Calculate
         FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());
@@ -203,6 +203,50 @@ public class AutonomousV1 extends LinearOpMode {
         telemetry.update();
 
         /**Tensor flow end */
+
+        //High goal shoot start
+
+        MecanumDirectionalFunction t = new MecanumDirectionalFunction();
+        t.Calculation(0, 0, -0.4);                              //Calculate
+        FrontLeftDrive.setPower(t.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(t.GetBackLeftPower());
+        FrontRightDrive.setPower(t.GetFrontRightPower());
+        BackRightDrive.setPower(t.GetBackRightPower());
+        sleep(1200);
+
+
+        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(O.GetBackLeftPower());
+        FrontRightDrive.setPower(O.GetFrontRightPower());
+        BackRightDrive.setPower(O.GetBackRightPower());
+        sleep(10);
+
+        LeftShooter.setPower(1);
+        RightShooter.setPower(-1);
+        sleep(500);
+
+        Intake.setPower(-1);
+
+        sleep(4000);
+
+        LeftShooter.setPower(0);
+        RightShooter.setPower(0);
+        Intake.setPower(0);
+
+        FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(r.GetBackLeftPower());
+        FrontRightDrive.setPower(r.GetFrontRightPower());
+        BackRightDrive.setPower(r.GetBackRightPower());
+        sleep(1200);
+
+        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(O.GetBackLeftPower());
+        FrontRightDrive.setPower(O.GetFrontRightPower());
+        BackRightDrive.setPower(O.GetBackRightPower());
+        sleep(10);
+
+
+        //High goal shoot end
 
 
         if (Path==0){
@@ -285,7 +329,7 @@ public class AutonomousV1 extends LinearOpMode {
             BackLeftDrive.setPower(x.GetBackLeftPower());
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(2000);
+            sleep(3000);
 
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
