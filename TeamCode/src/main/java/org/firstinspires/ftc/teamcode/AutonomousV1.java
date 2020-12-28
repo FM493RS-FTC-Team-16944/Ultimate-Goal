@@ -275,6 +275,11 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+            sleep(100);
 
         } else if (Path == 1) {
             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
@@ -314,7 +319,12 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-
+            Z.Calculation(-1,0,0)
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+            sleep(400);
 
 
 
@@ -344,7 +354,12 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-
+            P.Calculation(-1,0,0)
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+            sleep(800);
 
 
 
