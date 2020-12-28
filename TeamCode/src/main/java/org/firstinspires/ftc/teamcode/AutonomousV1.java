@@ -319,7 +319,7 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-            Z.Calculation(-1,0,0)
+            Z.Calculation(-1,0,0);
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
@@ -354,7 +354,7 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-            P.Calculation(-1,0,0)
+            P.Calculation(-1,0,0);
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
