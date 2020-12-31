@@ -24,10 +24,10 @@ private double[] powers = new double[4];
 
         yPower = -yPower;
 
-        powers[0] = (yPower - xPower - rotPower);           //Front Left Motor Powers
-        powers[1] = (- yPower - xPower + rotPower);         //Back Left Motor power
-        powers[2] = (yPower + xPower + rotPower);           //Front Right Motor Power
-        powers[3] = (yPower - xPower + rotPower);           //Back Right Motor Power
+        powers[0] = (yPower + xPower + rotPower);           //Front Left Motor Powers
+        powers[1] = (yPower - xPower + rotPower);         //Back Left Motor power
+        powers[2] = (-yPower - xPower + rotPower);           //Front Right Motor Power
+        powers[3] = (-yPower + xPower + rotPower);           //Back Right Motor Power
 
 
         //Scale all motor powers to ensure that movement and directionality are all maintained

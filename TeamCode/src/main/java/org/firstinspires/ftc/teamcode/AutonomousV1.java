@@ -156,7 +156,7 @@ public class AutonomousV1 extends LinearOpMode {
         /**Tensor flow start: */
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
-        while ( j < 2000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
+        while ( j < 6000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -275,10 +275,12 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-            BackLeftDrive.setPower(O.GetBackLeftPower());
-            FrontRightDrive.setPower(O.GetFrontRightPower());
-            BackRightDrive.setPower(O.GetBackRightPower());
+
+
+            FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(x.GetBackLeftPower());
+            FrontRightDrive.setPower(x.GetFrontRightPower());
+            BackRightDrive.setPower(x.GetBackRightPower());
             sleep(100);
 
         } else if (Path == 1) {
@@ -319,7 +321,10 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-            Z.Calculation(-1,0,0)
+
+
+            MecanumDirectionalFunction Z = new MecanumDirectionalFunction();
+            Z.Calculation(-1,0,0);
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
@@ -354,11 +359,14 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(-0.2);
             sleep(1000);
-            P.Calculation(-1,0,0)
-            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-            BackLeftDrive.setPower(O.GetBackLeftPower());
-            FrontRightDrive.setPower(O.GetFrontRightPower());
-            BackRightDrive.setPower(O.GetBackRightPower());
+
+
+            MecanumDirectionalFunction P = new MecanumDirectionalFunction();
+            P.Calculation(-1,0,0);
+            FrontLeftDrive.setPower(P.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(P.GetBackLeftPower());
+            FrontRightDrive.setPower(P.GetFrontRightPower());
+            BackRightDrive.setPower(P.GetBackRightPower());
             sleep(800);
 
 

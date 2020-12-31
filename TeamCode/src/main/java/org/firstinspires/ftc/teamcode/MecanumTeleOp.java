@@ -33,10 +33,10 @@ public class MecanumTeleOp extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rx = -gamepad1.right_stick_x;
 
-            FLPower = -(y - x - rx);
-            BLPower = -(- y - x + rx);
-            FRPower = -(y + x + rx);
-            BRPower = -(y - x + rx);
+            FLPower = (y + x + rx);
+            BLPower = (y - x + rx);
+            FRPower = (-y - x + rx);
+            BRPower = (-y + x + rx);
 
             telemetry.addData("Mode", "running");
             telemetry.addData("stick", "  y=" + y + "  x=" + x);

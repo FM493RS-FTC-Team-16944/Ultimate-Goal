@@ -17,7 +17,7 @@ public class MecanumTOShooter extends LinearOpMode {
     //TouchSensor Touch;
     Servo Gripper;
     double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
-    float LaunchPower;
+    double LaunchPower;
     boolean LeftBumper, buttonA, RightBumper;
     boolean AutoOn = false;
     boolean AutoSwitch = false;
@@ -61,10 +61,10 @@ public class MecanumTOShooter extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rx = -gamepad1.right_stick_x;
 
-            FLPower = (y - x - rx);
-            BLPower = (- y - x + rx);
-            FRPower = (y + x + rx);
-            BRPower = (y - x + rx);
+            FLPower = (y + x + rx);
+            BLPower = (y - x + rx);
+            FRPower = (-y - x + rx);
+            BRPower = (-y + x + rx);
 
             telemetry.addData("Mode", "running");
             telemetry.addData("stick", "  y=" + y + "  x=" + x);
@@ -157,7 +157,8 @@ public class MecanumTOShooter extends LinearOpMode {
                 AutoIn =  !AutoIn;
 
             if (AutoIn==true) {
-                IntakePower = -0.5;
+                IntakePower = -1;
+                LaunchPower = -0.1;
             } else {
                 IntakePower = 0;
             }
@@ -168,6 +169,13 @@ public class MecanumTOShooter extends LinearOpMode {
             PreviousIntake = RightBumper;
 
             //End of Intake Code
+
+            //Start of PreShoot Sequence
+            if (gamepad1.b==true){
+                LaunchPower=-0.2;
+                IntakePower=0.2;
+            }
+            //End of PreShoot Sequence
 
             //Motor Power Assignment
             FrontLeftDrive.setPower(FLPower);
