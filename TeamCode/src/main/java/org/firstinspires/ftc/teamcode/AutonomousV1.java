@@ -215,7 +215,7 @@ public class AutonomousV1 extends LinearOpMode {
         sleep(1200);
 
 
-        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers :)
         BackLeftDrive.setPower(O.GetBackLeftPower());
         FrontRightDrive.setPower(O.GetFrontRightPower());
         BackRightDrive.setPower(O.GetBackRightPower());
