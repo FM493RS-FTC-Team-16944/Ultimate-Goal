@@ -132,7 +132,7 @@ public class AutonomousV1 extends LinearOpMode {
         //sleep(200);
 
         MecanumDirectionalFunction x = new MecanumDirectionalFunction();
-         x.Calculation(1, 0, 0);                              //Calculate
+         x.Calculation(0, 1, 0);                              //Calculate
         FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());
@@ -205,13 +205,11 @@ public class AutonomousV1 extends LinearOpMode {
         /**Tensor flow end */
 
         //High goal shoot start
-
-        MecanumDirectionalFunction t = new MecanumDirectionalFunction();
-        t.Calculation(0, 0, -0.4);                              //Calculate
-        FrontLeftDrive.setPower(t.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(t.GetBackLeftPower());
-        FrontRightDrive.setPower(t.GetFrontRightPower());
-        BackRightDrive.setPower(t.GetBackRightPower());
+        
+        FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(x.GetBackLeftPower());
+        FrontRightDrive.setPower(x.GetFrontRightPower());
+        BackRightDrive.setPower(x.GetBackRightPower());
         sleep(1200);
 
 
@@ -235,15 +233,15 @@ public class AutonomousV1 extends LinearOpMode {
 
         FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(r.GetBackLeftPower());
-        FrontRightDrive.setPower(r.GetFrontRightPower());
-        BackRightDrive.setPower(r.GetBackRightPower());
-        sleep(1200);
+//         FrontRightDrive.setPower(r.GetFrontRightPower());
+//         BackRightDrive.setPower(r.GetBackRightPower());
+//         sleep(1200);
 
-        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(O.GetBackLeftPower());
-        FrontRightDrive.setPower(O.GetFrontRightPower());
-        BackRightDrive.setPower(O.GetBackRightPower());
-        sleep(10);
+//         FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+//         BackLeftDrive.setPower(O.GetBackLeftPower());
+//         FrontRightDrive.setPower(O.GetFrontRightPower());
+//         BackRightDrive.setPower(O.GetBackRightPower());
+//         sleep(10);
 
 
         //High goal shoot end
