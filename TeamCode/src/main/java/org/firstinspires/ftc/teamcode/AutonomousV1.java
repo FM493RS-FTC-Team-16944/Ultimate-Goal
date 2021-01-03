@@ -248,38 +248,43 @@ public class AutonomousV1 extends LinearOpMode {
 
 
         if (Path==0){
-            FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
-            BackLeftDrive.setPower(r.GetBackLeftPower());
-            FrontRightDrive.setPower(r.GetFrontRightPower());
-            BackRightDrive.setPower(r.GetBackRightPower());
-            sleep(300);
-
             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(x.GetBackLeftPower());
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(800);
-
+            sleep(200);
+            leftRotate.Calculation(0, 0, -1)
+            FrontLeftDrive.setPower(leftRotate.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(leftRotate.GetBackLeftPower());
+            FrontRightDrive.setPower(leftRotate.GetFrontRightPower());
+            BackRightDrive.setPower(leftRotate.GetBackRightPower());
+            sleep(250);
+            leftRotate.Calculation(0, 0, 0); 
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
             BackRightDrive.setPower(O.GetBackRightPower());
             sleep(400);
-
-            ArmBase.setPower(0.4);                                                       //Drops off the wobble goal
+            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
             sleep(500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
-            ArmBase.setPower(-0.2);
+            ArmBase.setPower(0.2);
             sleep(1000);
 
-
-            FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
-            BackLeftDrive.setPower(x.GetBackLeftPower());
-            FrontRightDrive.setPower(x.GetFrontRightPower());
-            BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(100);
+            leftSide.Calculation(0,-1, 0)
+            FrontLeftDrive.setPower(leftSide.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(leftSide.GetBackLeftPower());
+            FrontRightDrive.setPower(leftSide.GetFrontRightPower());
+            BackRightDrive.setPower(leftSide.GetBackRightPower());
+            sleep(200)
+            
+//             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
+//             BackLeftDrive.setPower(x.GetBackLeftPower());
+//             FrontRightDrive.setPower(x.GetFrontRightPower());
+//             BackRightDrive.setPower(x.GetBackRightPower());
+//             sleep(100);
 
         } else if (Path == 1) {
             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
