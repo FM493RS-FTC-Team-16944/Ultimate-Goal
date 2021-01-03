@@ -309,11 +309,13 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(0.2);
             sleep(1000);
+
+            MecanumDirectionalFunction leftSide = new MecanumDirectionalFunction();
             FrontLeftDrive.setPower(leftSide.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftSide.GetBackLeftPower());
             FrontRightDrive.setPower(leftSide.GetFrontRightPower());
             BackRightDrive.setPower(leftSide.GetBackRightPower());
-            sleep(500)
+            sleep(500);
 //             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
 //             BackLeftDrive.setPower(r.GetBackLeftPower());
 //             FrontRightDrive.setPower(r.GetFrontRightPower());
@@ -368,6 +370,8 @@ public class AutonomousV1 extends LinearOpMode {
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
             sleep(500);
+
+            MecanumDirectionalFunction leftRotate = new MecanumDirectionalFunction();
             FrontLeftDrive.setPower(leftRotate.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftRotate.GetBackLeftPower());
             FrontRightDrive.setPower(leftRotate.GetFrontRightPower());
@@ -385,11 +389,13 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(0.2);
             sleep(1000);
+
+            MecanumDirectionalFunction leftSide = new MecanumDirectionalFunction();
             FrontLeftDrive.setPower(leftSide.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftSide.GetBackLeftPower());
             FrontRightDrive.setPower(leftSide.GetFrontRightPower());
             BackRightDrive.setPower(leftSide.GetBackRightPower());
-            sleep(500)
+            sleep(500);
 //             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
 //             BackLeftDrive.setPower(r.GetBackLeftPower());
 //             FrontRightDrive.setPower(r.GetFrontRightPower());
