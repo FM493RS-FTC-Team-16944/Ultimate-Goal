@@ -104,21 +104,21 @@ public class AutonomousV1 extends LinearOpMode {
 
 
         //Pick Up Goal
-        Gripper.setPosition(Range.clip(0.5, 0, 1));
-        sleep(1250);
-        ArmBase.setPower(0.3);
-        sleep(850);
-        ArmBase.setPower(-0.1);
-        sleep(750);
-        Gripper.setPosition(Range.clip(0,0,1));
-        sleep(2000);
-        ArmBase.setPower(-0.4);
-        Gripper.setPosition(Range.clip(0,0,1));
-        sleep(800);
-        ArmBase.setPower(-0.2);
-        Gripper.setPosition(Range.clip(0,0,1));
-        sleep(400);
-        ArmBase.setPower(-0.1);
+        //Gripper.setPosition(Range.clip(0.5, 0, 1));
+        //sleep(1250);
+        //ArmBase.setPower(0.3);
+        //sleep(850);
+        //ArmBase.setPower(-0.1);
+        //sleep(750);
+        //Gripper.setPosition(Range.clip(0,0,1));
+        //sleep(2000);
+        //ArmBase.setPower(-0.4);
+        //Gripper.setPosition(Range.clip(0,0,1));
+        //sleep(800);
+        //ArmBase.setPower(-0.2);
+        //Gripper.setPosition(Range.clip(0,0,1));
+        //sleep(400);
+        //ArmBase.setPower(-0.1);
         Gripper.setPosition(Range.clip(0,0,1));
 
 
@@ -129,10 +129,10 @@ public class AutonomousV1 extends LinearOpMode {
         BackLeftDrive.setPower(r.GetBackLeftPower());
         FrontRightDrive.setPower(r.GetFrontRightPower());
         BackRightDrive.setPower(r.GetBackRightPower());
-        sleep(200);
+        //sleep(200);
 
         MecanumDirectionalFunction x = new MecanumDirectionalFunction();
-         x.Calculation(1, 0.15, 0);                              //Calculate
+         x.Calculation(1, 0, 0);                              //Calculate
         FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());

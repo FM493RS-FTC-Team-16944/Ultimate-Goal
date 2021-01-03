@@ -4,6 +4,7 @@ import android.text.method.Touch;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -16,6 +17,7 @@ public class MecanumTOShooter extends LinearOpMode {
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase, Intake;
     //TouchSensor Touch;
     Servo Gripper;
+    CRServo RightCRServo, LeftCRServo;
     double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
     double LaunchPower;
     boolean LeftBumper, buttonA, RightBumper;
@@ -43,6 +45,8 @@ public class MecanumTOShooter extends LinearOpMode {
         Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
         Gripper = hardwareMap.servo.get("Gripper");
+        RightCRServo = hardwareMap.crservo.get("RightCRServo");
+        LeftCRServo = hardwareMap.crservo.get("LeftCRServo");
         //Touch = hardwareMap.touchSensor.get("Touch");
 
 
@@ -116,13 +120,13 @@ public class MecanumTOShooter extends LinearOpMode {
             buttonA = gamepad1.a;
 
             if (gamepad1.x)                 //press X once wobble goal has been grabbed to counteract additional weight
-                ArmPower = -0.1;
+                ArmPower = 0.1;
             else ArmPower = 0;
 
             if (gamepad1.dpad_down)
-                ArmPower = 0.3;
-            if (gamepad1.dpad_up)
                 ArmPower = -0.4;
+            if (gamepad1.dpad_up)
+                ArmPower = 0.4;
 
             /*
             if(Touch.isPressed())
@@ -158,9 +162,13 @@ public class MecanumTOShooter extends LinearOpMode {
 
             if (AutoIn==true) {
                 IntakePower = -1;
-                LaunchPower = -0.1;
+                LaunchPower = -0.4;
+                RightCRServo.setPower(-1);
+                LeftCRServo.setPower(1);
             } else {
                 IntakePower = 0;
+                RightCRServo.setPower(0);
+                LeftCRServo.setPower(0);
             }
 
             if(gamepad1.right_trigger != 0)
@@ -172,8 +180,8 @@ public class MecanumTOShooter extends LinearOpMode {
 
             //Start of PreShoot Sequence
             if (gamepad1.b==true){
-                LaunchPower=-0.2;
-                IntakePower=0.2;
+                LaunchPower=-0.8;
+                IntakePower=0.4;
             }
             //End of PreShoot Sequence
 
