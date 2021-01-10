@@ -125,8 +125,8 @@ public class AutonomousV1 extends LinearOpMode {
 
 
 
-        MecanumDirectionalFunction r = new MecanumDirectionalFunction();
-        r.Calculation(0, 0, 0.4);                              //Calculate
+        //MecanumDirectionalFunction r = new MecanumDirectionalFunction();
+        //r.Calculation(0, 0, 0.4);                              //Calculate
         //FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
         //BackLeftDrive.setPower(r.GetBackLeftPower());
         //FrontRightDrive.setPower(r.GetFrontRightPower());
@@ -134,12 +134,12 @@ public class AutonomousV1 extends LinearOpMode {
         //sleep(200);
 
         MecanumDirectionalFunction x = new MecanumDirectionalFunction();
-         x.Calculation(0, 1, 0);                              //Calculate
+         x.Calculation(0, 0.67, 0);                              //Calculate
         FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());
         BackRightDrive.setPower(x.GetBackRightPower());
-        sleep(100);
+        sleep(300);
 
         MecanumDirectionalFunction O = new MecanumDirectionalFunction();
         O.Calculation(0, 0, 0);                              //Calculate
@@ -147,7 +147,7 @@ public class AutonomousV1 extends LinearOpMode {
         BackLeftDrive.setPower(O.GetBackLeftPower());
         FrontRightDrive.setPower(O.GetFrontRightPower());
         BackRightDrive.setPower(O.GetBackRightPower());
-        sleep(200);
+        sleep(100);
 
 
 
@@ -158,7 +158,7 @@ public class AutonomousV1 extends LinearOpMode {
         /**Tensor flow start: */
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
-        while ( j < 6000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
+        while ( j < 4000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -176,16 +176,16 @@ public class AutonomousV1 extends LinearOpMode {
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
 
-                        if (recognition.getLabel() == "Single") {               //Takes the string and determines what type of object it is
-                            Path = 1;
-                            break;                                              //Exits the loop early if one ring is detected
-                        } else if (recognition.getLabel() == "Quad") {
+                        if (recognition.getLabel() == "Quad") {               //Takes the string and determines what type of object it is
                             Path = 2;
+                            break;                                              //Exits the loop early if one ring is detected
+                        } else if (recognition.getLabel() == "Single") {
+                            Path = 1;
                             break;                                             //Exits the loop once the stack of rings is detected
                         }
                     }
 
-                    telemetry.addData("Count: 5,000,000>", j);
+                    telemetry.addData("Count: 4,000,000>", j);
                     telemetry.update();
 
 
@@ -212,8 +212,22 @@ public class AutonomousV1 extends LinearOpMode {
         BackLeftDrive.setPower(x.GetBackLeftPower());
         FrontRightDrive.setPower(x.GetFrontRightPower());
         BackRightDrive.setPower(x.GetBackRightPower());
-        sleep(400);
+        sleep(500);
 
+
+        FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers :)
+        BackLeftDrive.setPower(O.GetBackLeftPower());
+        FrontRightDrive.setPower(O.GetFrontRightPower());
+        BackRightDrive.setPower(O.GetBackRightPower());
+        sleep(10);
+
+        MecanumDirectionalFunction m = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
+        m.Calculation(0.5, 0, 0);                  //Calculate
+        FrontLeftDrive.setPower(m.GetFrontLeftPower());                              //Set Motor powers
+        BackLeftDrive.setPower(m.GetBackLeftPower());
+        FrontRightDrive.setPower(m.GetFrontRightPower());
+        BackRightDrive.setPower(m.GetBackRightPower());
+        sleep(400);
 
         FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers :)
         BackLeftDrive.setPower(O.GetBackLeftPower());
@@ -225,25 +239,25 @@ public class AutonomousV1 extends LinearOpMode {
         RightShooter.setPower(-1);
         sleep(500);
 
-        Intake.setPower(-0.75);
+        Intake.setPower(-1);
 
-        sleep(4000);
+        sleep(3000);
 
         LeftShooter.setPower(0);
         RightShooter.setPower(0);
         Intake.setPower(0);
 
-        FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
-        BackLeftDrive.setPower(r.GetBackLeftPower());
-//         FrontRightDrive.setPower(r.GetFrontRightPower());
-//         BackRightDrive.setPower(r.GetBackRightPower());
-//         sleep(1200);
+//      FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
+//      BackLeftDrive.setPower(r.GetBackLeftPower());
+//      FrontRightDrive.setPower(r.GetFrontRightPower());
+//      BackRightDrive.setPower(r.GetBackRightPower());
+//      sleep(1200);
 
-//         FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-//         BackLeftDrive.setPower(O.GetBackLeftPower());
-//         FrontRightDrive.setPower(O.GetFrontRightPower());
-//         BackRightDrive.setPower(O.GetBackRightPower());
-//         sleep(10);
+//      FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+//      BackLeftDrive.setPower(O.GetBackLeftPower());
+//      FrontRightDrive.setPower(O.GetFrontRightPower());
+//      BackRightDrive.setPower(O.GetBackRightPower());
+//      sleep(10);
 
 
         //High goal shoot end
@@ -254,28 +268,22 @@ public class AutonomousV1 extends LinearOpMode {
             BackLeftDrive.setPower(x.GetBackLeftPower());
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(200);
+            sleep(1200);
 
             MecanumDirectionalFunction leftRotate = new MecanumDirectionalFunction();
-            leftRotate.Calculation(0, 0, -1);
+            leftRotate.Calculation(0, 0, 1);
             FrontLeftDrive.setPower(leftRotate.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftRotate.GetBackLeftPower());
             FrontRightDrive.setPower(leftRotate.GetFrontRightPower());
             BackRightDrive.setPower(leftRotate.GetBackRightPower());
-            sleep(250);
-            leftRotate.Calculation(0, 0, 0); 
+            sleep(500);
+
+
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
             BackRightDrive.setPower(O.GetBackRightPower());
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.2);
-            sleep(1000);
+
 
             MecanumDirectionalFunction leftSide = new MecanumDirectionalFunction();
             leftSide.Calculation(0,-1, 0);
@@ -283,7 +291,24 @@ public class AutonomousV1 extends LinearOpMode {
             BackLeftDrive.setPower(leftSide.GetBackLeftPower());
             FrontRightDrive.setPower(leftSide.GetFrontRightPower());
             BackRightDrive.setPower(leftSide.GetBackRightPower());
-            sleep(200);
+            sleep(100);
+
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+
+            sleep(400);
+            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
+            sleep(1500);
+            ArmBase.setPower(0);
+            Gripper.setPosition(Range.clip(0.5, 0, 1));
+            sleep(2000);
+            ArmBase.setPower(0.2);
+            sleep(1000);
+
+
+
             
 //             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
 //             BackLeftDrive.setPower(x.GetBackLeftPower());
@@ -296,14 +321,18 @@ public class AutonomousV1 extends LinearOpMode {
             BackLeftDrive.setPower(x.GetBackLeftPower());
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(500);
+            sleep(2750);
+
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
             BackRightDrive.setPower(O.GetBackRightPower());
+
+            sleep(100);
+
             sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(500);
+            sleep(1500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
@@ -311,57 +340,26 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(1000);
 
             MecanumDirectionalFunction leftSide = new MecanumDirectionalFunction();
+            leftSide.Calculation(-0.5,0,0);
             FrontLeftDrive.setPower(leftSide.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftSide.GetBackLeftPower());
             FrontRightDrive.setPower(leftSide.GetFrontRightPower());
             BackRightDrive.setPower(leftSide.GetBackRightPower());
-            sleep(500);
-//             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(r.GetBackLeftPower());
-//             FrontRightDrive.setPower(r.GetFrontRightPower());
-//             BackRightDrive.setPower(r.GetBackRightPower());
-//             sleep(300);
+            sleep(1000);
 
-//             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(x.GetBackLeftPower());
-//             FrontRightDrive.setPower(x.GetFrontRightPower());
-//             BackRightDrive.setPower(x.GetBackRightPower());
-//             sleep(1000);
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
 
-//             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(r.GetBackLeftPower());
-//             FrontRightDrive.setPower(r.GetFrontRightPower());
-//             BackRightDrive.setPower(r.GetBackRightPower());
-//             sleep(800);
+            MecanumDirectionalFunction bw = new MecanumDirectionalFunction();
+            bw.Calculation(0,-0.67,0);
+            FrontLeftDrive.setPower(bw.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(bw.GetBackLeftPower());
+            FrontRightDrive.setPower(bw.GetFrontRightPower());
+            BackRightDrive.setPower(bw.GetBackRightPower());
+            sleep(700);
 
-//             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(x.GetBackLeftPower());
-//             FrontRightDrive.setPower(x.GetFrontRightPower());
-//             BackRightDrive.setPower(x.GetBackRightPower());
-//             sleep(700);
-
-//             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(O.GetBackLeftPower());
-//             FrontRightDrive.setPower(O.GetFrontRightPower());
-//             BackRightDrive.setPower(O.GetBackRightPower());
-//             sleep(200);
-
-//             ArmBase.setPower(0.4);                                                       //Drops off the wobble goal
-//             sleep(500);
-//             ArmBase.setPower(0);
-//             Gripper.setPosition(Range.clip(0.5, 0, 1));
-//             sleep(2000);
-//             ArmBase.setPower(-0.2);
-//             sleep(1000);
-
-
-//             MecanumDirectionalFunction Z = new MecanumDirectionalFunction();
-//             Z.Calculation(-1,0,0);
-//             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(O.GetBackLeftPower());
-//             FrontRightDrive.setPower(O.GetFrontRightPower());
-//             BackRightDrive.setPower(O.GetBackRightPower());
-//             sleep(400);
 
 
         } else if (Path == 2) {
@@ -369,21 +367,45 @@ public class AutonomousV1 extends LinearOpMode {
             BackLeftDrive.setPower(x.GetBackLeftPower());
             FrontRightDrive.setPower(x.GetFrontRightPower());
             BackRightDrive.setPower(x.GetBackRightPower());
-            sleep(500);
+            sleep(2750);
 
-            MecanumDirectionalFunction leftRotate = new MecanumDirectionalFunction();
-            FrontLeftDrive.setPower(leftRotate.GetFrontLeftPower());                              //Set Motor powers
-            BackLeftDrive.setPower(leftRotate.GetBackLeftPower());
-            FrontRightDrive.setPower(leftRotate.GetFrontRightPower());
-            BackRightDrive.setPower(leftRotate.GetBackRightPower());
-            sleep(250);
             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(O.GetBackLeftPower());
             FrontRightDrive.setPower(O.GetFrontRightPower());
             BackRightDrive.setPower(O.GetBackRightPower());
+
+            MecanumDirectionalFunction leftRotate = new MecanumDirectionalFunction();
+            leftRotate.Calculation(0, 0, 1);
+            FrontLeftDrive.setPower(leftRotate.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(leftRotate.GetBackLeftPower());
+            FrontRightDrive.setPower(leftRotate.GetFrontRightPower());
+            BackRightDrive.setPower(leftRotate.GetBackRightPower());
+            sleep(400);
+
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+
+            MecanumDirectionalFunction bw = new MecanumDirectionalFunction();
+            bw.Calculation(0,-0.67,0);
+            FrontLeftDrive.setPower(bw.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(bw.GetBackLeftPower());
+            FrontRightDrive.setPower(bw.GetFrontRightPower());
+            BackRightDrive.setPower(bw.GetBackRightPower());
+            sleep(100);
+
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
+
+
+            sleep(100);
+
             sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(500);
+            sleep(1500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
@@ -391,47 +413,22 @@ public class AutonomousV1 extends LinearOpMode {
             sleep(1000);
 
             MecanumDirectionalFunction leftSide = new MecanumDirectionalFunction();
+            leftSide.Calculation(-0.67,0,0);
             FrontLeftDrive.setPower(leftSide.GetFrontLeftPower());                              //Set Motor powers
             BackLeftDrive.setPower(leftSide.GetBackLeftPower());
             FrontRightDrive.setPower(leftSide.GetFrontRightPower());
             BackRightDrive.setPower(leftSide.GetBackRightPower());
-            sleep(500);
-//             FrontLeftDrive.setPower(r.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(r.GetBackLeftPower());
-//             FrontRightDrive.setPower(r.GetFrontRightPower());
-//             BackRightDrive.setPower(r.GetBackRightPower());
-//             sleep(750);
+            sleep(1750);
 
-//             FrontLeftDrive.setPower(x.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(x.GetBackLeftPower());
-//             FrontRightDrive.setPower(x.GetFrontRightPower());
-//             BackRightDrive.setPower(x.GetBackRightPower());
-//             sleep(3000);
-
-//             FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(O.GetBackLeftPower());
-//             FrontRightDrive.setPower(O.GetFrontRightPower());
-//             BackRightDrive.setPower(O.GetBackRightPower());
-//             sleep(400);
-
-//             ArmBase.setPower(0.4);                                                       //Drops off the wobble goal
-//             sleep(500);
-//             ArmBase.setPower(0);
-//             Gripper.setPosition(Range.clip(0.5, 0, 1));
-//             sleep(2000);
-//             ArmBase.setPower(-0.2);
-//             sleep(1000);
+            FrontLeftDrive.setPower(O.GetFrontLeftPower());                              //Set Motor powers
+            BackLeftDrive.setPower(O.GetBackLeftPower());
+            FrontRightDrive.setPower(O.GetFrontRightPower());
+            BackRightDrive.setPower(O.GetBackRightPower());
 
 
-//             MecanumDirectionalFunction P = new MecanumDirectionalFunction();
-//             P.Calculation(-1,0,0);
-//             FrontLeftDrive.setPower(P.GetFrontLeftPower());                              //Set Motor powers
-//             BackLeftDrive.setPower(P.GetBackLeftPower());
-//             FrontRightDrive.setPower(P.GetFrontRightPower());
-//             BackRightDrive.setPower(P.GetBackRightPower());
-//             sleep(800);
+
         }
-        sleep(10000);
+
 
 
 
