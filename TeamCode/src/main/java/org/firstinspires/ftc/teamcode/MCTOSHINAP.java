@@ -426,7 +426,35 @@ public class MCTOSHINAP extends LinearOpMode {
 
             //AutoAlign Code Start
             if(gamepad1.a==true){
-
+                float speed = 10;
+                float robotX = 10;
+                float robotY = 10;
+                float targetX = 10;
+                float targetY = 10;
+                float newX = targetX - robotX;
+                float newY = targetY - robotY;
+                if(newX > 0){
+                    float estPX = |newX| / speed;
+                    posX.Calculation(0.8,0 , 0);
+                    FrontLeftDrive.setPower(posX);
+                    sleep(estPX);
+                }else{
+                    float estNX = |newX| / speed;
+                    negX.Calculation(-0.8, 0, 0);
+                    FrontLeftDrive.setPower(negX);
+                    sleep(estNX);
+                }
+                if(newY > 0){
+                    float estPY = |newY| / speed;
+                    posY.Calculation(0, 0.8, 0);
+                    FrontLeftDrive.setPower(posY);
+                    sleep(estPY);
+                }else{
+                    float estNY = |newY| / speed;
+                    negY.Calculation(0, -0.8, 0);
+                    FrontLeftDrive.setPower(negY);
+                    sleep(estNY);
+                }
             }
 
             
