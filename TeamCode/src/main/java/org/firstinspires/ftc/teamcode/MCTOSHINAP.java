@@ -356,7 +356,7 @@ public class MCTOSHINAP extends LinearOpMode {
 
             //End of Gripper Code
 
-            //Start of Intake Code
+            //Start of Intake Code :)
 
             RightBumper = gamepad1.right_bumper;
 
