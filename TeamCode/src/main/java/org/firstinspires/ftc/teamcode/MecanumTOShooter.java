@@ -25,12 +25,12 @@ public class MecanumTOShooter extends LinearOpMode {
     CRServo RightCRServo, LeftCRServo;
     double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
     double LaunchPower;
-    boolean LeftBumper, buttonA, RightBumper;
+    boolean LeftBumper, buttonX, RightBumper;
     boolean AutoOn = false;
     boolean AutoSwitch = false;
     boolean AutoIn = false;
     boolean PreviousBumper = false;
-    boolean PreviousbuttonA = false;
+    boolean PreviousbuttonX = false;
     boolean PreviousIntake = false;
     float GripStregnth = 0;
     double ArmPower = 0;
@@ -154,11 +154,8 @@ public class MecanumTOShooter extends LinearOpMode {
             //End of Shooter Code
 
             //Start of Gripper Code
-            buttonA = gamepad1.a;
+            buttonX = gamepad1.x;
 
-            if (gamepad1.x)                 //press X once wobble goal has been grabbed to counteract additional weight
-                ArmPower = 0.1;
-            else ArmPower = 0;
 
             if (gamepad1.dpad_down)
                 ArmPower = -0.4;
@@ -175,9 +172,9 @@ public class MecanumTOShooter extends LinearOpMode {
 
             ArmPower = ArmPower + ConstRes;
 
-            buttonA = gamepad1.a;
+            buttonX = gamepad1.x;
 
-            if (buttonA == true&&buttonA!=PreviousbuttonA)
+            if (buttonX == true&&buttonX!=PreviousbuttonX)
                 AutoSwitch =  !AutoSwitch;
 
             if (AutoSwitch==true) {
@@ -186,7 +183,7 @@ public class MecanumTOShooter extends LinearOpMode {
                 Gripper.setPosition(Range.clip(0.5, 0, 1));
             }
 
-            PreviousbuttonA = buttonA;
+            PreviousbuttonX = buttonX;
 
             //End of Gripper Code
 

@@ -43,7 +43,7 @@ public class MCTOSHINAP extends LinearOpMode {
     //TouchSensor Touch;
     Servo Gripper;
     double   FLPower, FRPower, BLPower, BRPower, ConstRes, IntakePower;
-    float LaunchPower;
+    double LaunchPower;
     boolean LeftBumper, buttonX, RightBumper;
     boolean AutoOn = false;
     boolean AutoSwitch = false;
@@ -327,9 +327,9 @@ public class MCTOSHINAP extends LinearOpMode {
             else ArmPower = 0;
 
             if (gamepad1.dpad_down)
-                ArmPower = 0.3;
+                ArmPower = -0.6;
             if (gamepad1.dpad_up)
-                ArmPower = -0.4;
+                ArmPower = 0.4;
 
             /*
             if(Touch.isPressed())
@@ -365,6 +365,7 @@ public class MCTOSHINAP extends LinearOpMode {
 
             if (AutoIn==true) {
                 IntakePower = -1;
+                LaunchPower = -0.4;
             } else {
                 IntakePower = 0;
             }
@@ -376,8 +377,15 @@ public class MCTOSHINAP extends LinearOpMode {
 
             //End of Intake Code
 
+            //Start of PreShoot Sequence
+            if (gamepad1.b==true){
+                LaunchPower = -0.8;
+                IntakePower=0.4;
+            }
+            //End of PreShoot Sequence
+
             /**Vuforia Run */
-            double Xpos, Ypos, Zpos, Yaw;
+            float Xpos, Ypos, Zpos, Yaw;
             Xpos = 0;
             Ypos = 0;
             Zpos = 0;
@@ -422,19 +430,42 @@ public class MCTOSHINAP extends LinearOpMode {
             telemetry.update();
 
 
+
             /**End of Vuforia Run */
 
             //AutoAlign Code Start
             if(gamepad1.a==true){
                 long speed = 10;
-                long robotX = 10;
-                long robotY = 10;
-                long targetX = 10;
-                long targetY = 10;
-                long newX = targetX - robotX;
-                long newY = targetY - robotY;
+                float robotX = Ypos;   //switch is necessary due to coordinate system change
+                float robotY = Xpos;
+                float robotYaw = Yaw;
+                long targetX = -32;
+                long targetY = -12;
+                long newX = targetX - (long)robotX;
+                long newY = targetY - (long)robotY;
+                long sd = 360; //replace 360 with seconds per degree of rotation
+
+                MecanumDirectionalFunction rotate = new MecanumDirectionalFunction();
+                if(robotYaw<0){
+                    rotate.Calculation(0,0 , -0.8);
+                    FrontLeftDrive.setPower(rotate.GetFrontLeftPower());
+                    BackLeftDrive.setPower(rotate.GetBackLeftPower());
+                    FrontRightDrive.setPower(rotate.GetFrontRightPower());
+                    BackRightDrive.setPower(rotate.GetBackRightPower());
+                    sleep((long)((0-robotYaw)*sd));   //replace sd with seconds per degree of rotation at 80% power
+                }
+
+                if(robotYaw>0){
+                    rotate.Calculation(0,0 , 0.8);
+                    FrontLeftDrive.setPower(rotate.GetFrontLeftPower());
+                    BackLeftDrive.setPower(rotate.GetBackLeftPower());
+                    FrontRightDrive.setPower(rotate.GetFrontRightPower());
+                    BackRightDrive.setPower(rotate.GetBackRightPower());
+                    sleep((long)((0-robotYaw)*sd));   //replace sd with seconds per degree of rotation at 80% power
+                }
+
                 if(newX > 0){
-                    long estPX = Math.abs(newX)/speed;
+                    long estPX = (Math.abs(newX))/3;  //replace 3 with ft/s
                     MecanumDirectionalFunction posX = new MecanumDirectionalFunction();
                     posX.Calculation(0.8,0 , 0);
                     FrontLeftDrive.setPower(posX.GetFrontLeftPower());
@@ -443,7 +474,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackRightDrive.setPower(posX.GetBackRightPower());
                     sleep(estPX);
                 }else{
-                    long estNX = Math.abs(newX)/speed;
+                    long estNX = Math.abs(newX)/3; //replace 3 with ft/s
                     MecanumDirectionalFunction negX = new MecanumDirectionalFunction();
                     negX.Calculation(-0.8, 0, 0);
                     FrontLeftDrive.setPower(negX.GetFrontLeftPower());
@@ -453,7 +484,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     sleep(estNX);
                 }
                 if(newY > 0){
-                    long estPY = Math.abs(newY)/speed;
+                    long estPY = Math.abs(newY)/3;   //replace 3 with ft/s
                     MecanumDirectionalFunction posY = new MecanumDirectionalFunction();
                     posY.Calculation(0, 0.8, 0);
                     FrontLeftDrive.setPower(posY.GetFrontLeftPower());
@@ -462,7 +493,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackRightDrive.setPower(posY.GetBackRightPower());
                     sleep(estPY);
                 }else{
-                    long estNY = Math.abs(newY)/speed;
+                    long estNY = Math.abs(newY)/3;   //replace 3 with ft/s
                     MecanumDirectionalFunction negY = new MecanumDirectionalFunction();
                     negY.Calculation(0, -0.8, 0);
                     FrontLeftDrive.setPower(negY.GetFrontLeftPower());
