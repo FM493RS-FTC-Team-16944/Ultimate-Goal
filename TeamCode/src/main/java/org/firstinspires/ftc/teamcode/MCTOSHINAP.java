@@ -452,7 +452,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackLeftDrive.setPower(rotate.GetBackLeftPower());
                     FrontRightDrive.setPower(rotate.GetFrontRightPower());
                     BackRightDrive.setPower(rotate.GetBackRightPower());
-                    sleep((long)((0-robotYaw)*sd));   //replace sd with seconds per degree of rotation at 80% power
+                    sleep((long)((0-robotYaw)*sd/1000));   //replace sd with seconds per degree of rotation at 80% power
                 }
 
                 if(robotYaw>0){
@@ -461,11 +461,11 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackLeftDrive.setPower(rotate.GetBackLeftPower());
                     FrontRightDrive.setPower(rotate.GetFrontRightPower());
                     BackRightDrive.setPower(rotate.GetBackRightPower());
-                    sleep((long)((0-robotYaw)*sd));   //replace sd with seconds per degree of rotation at 80% power
+                    sleep((long)((0-robotYaw)*sd/1000));   //replace sd with seconds per degree of rotation at 80% power
                 }
 
                 if(newX > 0){
-                    long estPX = (Math.abs(newX))/3;  //replace 3 with ft/s
+                    long estPX = (Math.abs(newX))/36;  //replace 3 with ft/s
                     MecanumDirectionalFunction posX = new MecanumDirectionalFunction();
                     posX.Calculation(0.8,0 , 0);
                     FrontLeftDrive.setPower(posX.GetFrontLeftPower());
@@ -474,7 +474,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackRightDrive.setPower(posX.GetBackRightPower());
                     sleep(estPX);
                 }else{
-                    long estNX = Math.abs(newX)/3; //replace 3 with ft/s
+                    long estNX = Math.abs(newX)/36; //replace 3 with ft/s
                     MecanumDirectionalFunction negX = new MecanumDirectionalFunction();
                     negX.Calculation(-0.8, 0, 0);
                     FrontLeftDrive.setPower(negX.GetFrontLeftPower());
@@ -484,7 +484,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     sleep(estNX);
                 }
                 if(newY > 0){
-                    long estPY = Math.abs(newY)/3;   //replace 3 with ft/s
+                    long estPY = Math.abs(newY)/36;   //replace 3 with ft/s
                     MecanumDirectionalFunction posY = new MecanumDirectionalFunction();
                     posY.Calculation(0, 0.8, 0);
                     FrontLeftDrive.setPower(posY.GetFrontLeftPower());
@@ -493,7 +493,7 @@ public class MCTOSHINAP extends LinearOpMode {
                     BackRightDrive.setPower(posY.GetBackRightPower());
                     sleep(estPY);
                 }else{
-                    long estNY = Math.abs(newY)/3;   //replace 3 with ft/s
+                    long estNY = Math.abs(newY)/36;   //replace 3 with ft/s
                     MecanumDirectionalFunction negY = new MecanumDirectionalFunction();
                     negY.Calculation(0, -0.8, 0);
                     FrontLeftDrive.setPower(negY.GetFrontLeftPower());
