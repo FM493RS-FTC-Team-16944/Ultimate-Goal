@@ -426,33 +426,49 @@ public class MCTOSHINAP extends LinearOpMode {
 
             //AutoAlign Code Start
             if(gamepad1.a==true){
-                float speed = 10;
-                float robotX = 10;
-                float robotY = 10;
-                float targetX = 10;
-                float targetY = 10;
-                float newX = targetX - robotX;
-                float newY = targetY - robotY;
+                long speed = 10;
+                long robotX = 10;
+                long robotY = 10;
+                long targetX = 10;
+                long targetY = 10;
+                long newX = targetX - robotX;
+                long newY = targetY - robotY;
                 if(newX > 0){
-                    float estPX = |newX| / speed;
+                    long estPX = Math.abs(newX)/speed;
+                    MecanumDirectionalFunction posX = new MecanumDirectionalFunction();
                     posX.Calculation(0.8,0 , 0);
-                    FrontLeftDrive.setPower(posX);
+                    FrontLeftDrive.setPower(posX.GetFrontLeftPower());
+                    BackLeftDrive.setPower(posX.GetBackLeftPower());
+                    FrontRightDrive.setPower(posX.GetFrontRightPower());
+                    BackRightDrive.setPower(posX.GetBackRightPower());
                     sleep(estPX);
                 }else{
-                    float estNX = |newX| / speed;
+                    long estNX = Math.abs(newX)/speed;
+                    MecanumDirectionalFunction negX = new MecanumDirectionalFunction();
                     negX.Calculation(-0.8, 0, 0);
-                    FrontLeftDrive.setPower(negX);
+                    FrontLeftDrive.setPower(negX.GetFrontLeftPower());
+                    BackLeftDrive.setPower(negX.GetBackLeftPower());
+                    FrontRightDrive.setPower(negX.GetFrontRightPower());
+                    BackRightDrive.setPower(negX.GetBackRightPower());
                     sleep(estNX);
                 }
                 if(newY > 0){
-                    float estPY = |newY| / speed;
+                    long estPY = Math.abs(newY)/speed;
+                    MecanumDirectionalFunction posY = new MecanumDirectionalFunction();
                     posY.Calculation(0, 0.8, 0);
-                    FrontLeftDrive.setPower(posY);
+                    FrontLeftDrive.setPower(posY.GetFrontLeftPower());
+                    BackLeftDrive.setPower(posY.GetBackLeftPower());
+                    FrontRightDrive.setPower(posY.GetFrontRightPower());
+                    BackRightDrive.setPower(posY.GetBackRightPower());
                     sleep(estPY);
                 }else{
-                    float estNY = |newY| / speed;
+                    long estNY = Math.abs(newY)/speed;
+                    MecanumDirectionalFunction negY = new MecanumDirectionalFunction();
                     negY.Calculation(0, -0.8, 0);
-                    FrontLeftDrive.setPower(negY);
+                    FrontLeftDrive.setPower(negY.GetFrontLeftPower());
+                    BackLeftDrive.setPower(negY.GetBackLeftPower());
+                    FrontRightDrive.setPower(negY.GetFrontRightPower());
+                    BackRightDrive.setPower(negY.GetBackRightPower());
                     sleep(estNY);
                 }
             }
