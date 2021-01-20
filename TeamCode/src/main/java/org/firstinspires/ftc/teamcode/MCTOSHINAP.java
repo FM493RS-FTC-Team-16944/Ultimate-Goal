@@ -35,9 +35,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 
-@TeleOp(name="ARCM-TO-SIA", group="Driver")
+@TeleOp(name="MCTOSHINAP", group="Driver")
 //@Disabled
-public class ArcmToSiA extends LinearOpMode {
+public class MCTOSHINAP extends LinearOpMode {
     //Start of std init
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, ArmBase, Intake;
     //TouchSensor Touch;
@@ -426,82 +426,9 @@ public class ArcmToSiA extends LinearOpMode {
 
             //AutoAlign Code Start
             if(gamepad1.a==true){
-                AutoAlign System = new AutoAlign();
-                System.Math(60,40,40, Xpos, Ypos, Zpos);
-                System.Orient(Yaw);
-                double TargetAngle = System.GetAngle() ;
-                telemetry.addData("TargetAngle", TargetAngle);
-                telemetry.addData("Current Angle",Yaw);
-                telemetry.update();
-
-
-                resetAngle();
-                TargetAngle = -Yaw+TargetAngle;
-
-                // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-                // clockwise (right).
-
-                if (TargetAngle < 0)
-                {   // turn right.
-
-                    MecanumDirectionalFunction R = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-                    R.Calculation(0, 0, +0.2);                  //Calculate
-                    FrontLeftDrive.setPower(R.GetFrontLeftPower());                              //Set Motor powers
-                    BackLeftDrive.setPower(R.GetBackLeftPower());
-                    FrontRightDrive.setPower(R.GetFrontRightPower());
-                    BackRightDrive.setPower(R.GetBackRightPower());
-                }
-                else if (TargetAngle > 0)
-                {   // turn left.
-                    MecanumDirectionalFunction L = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-                    L.Calculation(0, 0, -0.2);                  //Calculate
-                    FrontLeftDrive.setPower(L.GetFrontLeftPower());                              //Set Motor powers
-                    BackLeftDrive.setPower(L.GetBackLeftPower());
-                    FrontRightDrive.setPower(L.GetFrontRightPower());
-                    BackRightDrive.setPower(L.GetBackRightPower());
-                }
-                else return;
-
-                //telemetry.addData("Angle",getAngle());
-                //telemetry.update();
-
-                // rotate until turn is completed.
-                if (TargetAngle < 0)
-                {
-                    // On right turn we have to get off zero first.
-                    while (opModeIsActive() && getAngle() == 0) {}
-
-                    while (opModeIsActive() && getAngle() > TargetAngle) {}
-                }
-                else    // left turn.
-                    while (opModeIsActive() && getAngle() < TargetAngle) {}
-
-                // turn the motors off.
-
-                MecanumDirectionalFunction o = new MecanumDirectionalFunction();             //Instantiate object m of class MecanumDirectionalFunction *Object does not have to be called m*
-                o.Calculation(0, 0, 0);                              //Calculate
-                FrontLeftDrive.setPower(o.GetFrontLeftPower());                              //Set Motor powers
-                BackLeftDrive.setPower(o.GetBackLeftPower());
-                FrontRightDrive.setPower(o.GetFrontRightPower());
-                BackRightDrive.setPower(o.GetBackRightPower());
-
-
-                // wait for rotation to stop.
-                sleep(1000);
-
-                // reset angle tracking on new heading.
-                resetAngle();
-
 
             }
-            //Autoalign Code end
-            int distance = 200; //random distance for rn
-            int fullDistance = distance + 50; //need to find out the distance from landing point to front of power shot goal 50 is just a placer
-            if(fullDistance <= 210) {
-                 double rpmSPerct = (fullDistance / 216.74) * 100;
-            } else {
-                double rpmLPerct = (fullDistance / 404) * 100;
-            }
+
             
             
             //Motor Power Assignment
