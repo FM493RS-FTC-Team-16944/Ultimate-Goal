@@ -17,7 +17,7 @@ import java.util.List;
 public class RegressionUtil {
 
     /**
-     * Feedforward parameter estimates from the ramp regression and additional summary statistics
+     * Feedforward parameter estimates from the ramp regression and additional summary statisticss
      */
     public static class RampResult {
         public final double kV, kStatic, rSquare;
