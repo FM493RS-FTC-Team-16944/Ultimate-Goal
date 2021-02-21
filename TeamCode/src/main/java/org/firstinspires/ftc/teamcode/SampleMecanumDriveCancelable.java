@@ -142,10 +142,10 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
         // upward (normal to the floor) using a command like the following:
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "FrontLeftDrive");
+        leftRear = hardwareMap.get(DcMotorEx.class, "BackLeftDrive");
+        rightRear = hardwareMap.get(DcMotorEx.class, "BackRightDrive");
+        rightFront = hardwareMap.get(DcMotorEx.class, "FrontRightDrive");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
