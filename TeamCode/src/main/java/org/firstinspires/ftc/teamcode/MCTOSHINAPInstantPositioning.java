@@ -66,6 +66,9 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
         Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
         Gripper = hardwareMap.servo.get("Gripper");
+        ArmBase.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LeftShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
