@@ -177,6 +177,13 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                     }
                     //End of PreShoot Sequence
 
+
+                    //Power Assignment
+                    RightShooter.setPower(-LaunchPower);
+                    LeftShooter.setPower(LaunchPower);
+                    Intake.setPower(IntakePower);
+                    ArmBase.setPower(ArmPower);
+
                     if (gamepad1.a) {
                         // If the A button is pressed on gamepad1, we generate a splineTo()
                         // trajectory on the fly and follow it

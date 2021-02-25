@@ -1,5 +1,5 @@
-package org.firstinspires.ftc.teamcode;
 
+package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+
 import static org.firstinspires.ftc.teamcode.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.DriveConstants.MAX_ANG_VEL;
@@ -64,7 +65,7 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 1.2;
+    public static double LATERAL_MULTIPLIER = 1;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -132,15 +133,20 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
+        // TODO: adjust the names of the following hardware devices to match your configuration
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
 
         // TODO: if your hub is mounted vertically, remap the IMU axes so that the z-axis points
         // upward (normal to the floor) using a command like the following:
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
-        leftRear = hardwareMap.get(DcMotorEx.class, "FrontLeftDrive");
-        leftFront = hardwareMap.get(DcMotorEx.class, "BackLeftDrive");
-        rightRear = hardwareMap.get(DcMotorEx.class, "BackRightDrive");
-        rightFront = hardwareMap.get(DcMotorEx.class, "FrontRightDrive");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -149,7 +155,6 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
             motor.setMotorType(motorConfigurationType);
         }
-
 
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -165,8 +170,7 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new TwoWheelTrackingLocalizerCancelable(hardwareMap, this));
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -396,8 +400,9 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return 0;
+        return imu.getAngularOrientation().firstAngle;
     }
+
     @Override
     public Double getExternalHeadingVelocity() {
         // TODO: This must be changed to match your configuration
