@@ -147,14 +147,14 @@ public class AutonomousV2 extends LinearOpMode {
             //tfod.setZoom(2.5, 1.78);
         }
 
-        Pose2d startPose = new Pose2d(-58, -58, 0);
+        Pose2d startPose = new Pose2d(-56, -57, 0);
         drive.setPoseEstimate(startPose);
 
 
         // TODO: tune the coordinates to make sure they are accurate and reliable
         Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
                 .splineTo(new Vector2d(0,-58),Math.toRadians(0))                 //Go to appropriate distance forward (in front of rings
-                .splineTo(new Vector2d(0,-36), Math.toRadians(0))                //GO to approptiate Distance left (in front of rings)
+                .splineToConstantHeading(new Vector2d(0,-36), Math.toRadians(0))                //GO to approptiate Distance left (in front of rings)
                 .build();
 
         Trajectory PathZero = drive.trajectoryBuilder(MovetoRings.end())             //ZERO path picks off when the first path ends
@@ -170,15 +170,15 @@ public class AutonomousV2 extends LinearOpMode {
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
-                .splineTo(new Vector2d(12,-36), Math.toRadians(0))
+                .strafeTo(new Vector2d(12,-36))
                 .build();
 
         Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
-                .splineTo(new Vector2d(12,-36), Math.toRadians(0))
+                .strafeTo(new Vector2d(12,-36))
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
-                .splineTo(new Vector2d(12,-36), Math.toRadians(0))
+                .strafeTo(new Vector2d(12,-36))
                 .build();
 
 
