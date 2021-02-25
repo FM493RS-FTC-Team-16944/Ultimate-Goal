@@ -193,11 +193,22 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                         // trajectory on the fly and follow it
                         // We switch the state to AUTOMATIC_CONTROL
 
-                        Trajectory traj1 = drive.trajectoryBuilder(poseEstimate)
-                                .splineTo(targetAVector, targetAHeading)
-                                .build();
 
-                        drive.followTrajectoryAsync(traj1);
+                        // TODO: WOrk on this, try to work out spline to spline heading
+                        if(poseEstimate.getX()>-1.5){                                          //If the robot is ahead of the shooting target postiition it is inneficient for it to turn, drive to point, and then turn again, which is why it goes in reverse
+                            Trajectory BacktoShoot = drive.trajectoryBuilder(poseEstimate, true)
+                                    .splineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)), Math.toRadians(0))
+                                    .build();
+
+                            drive.followTrajectoryAsync(BacktoShoot);
+                        } else{                                                                   //Standard go to point without reverse direction, it is in the else because this is the preferred pattern for unfamiliar cases
+                            Trajectory ForwardToShoot = drive.trajectoryBuilder(poseEstimate)
+                                    .splineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)), Math.toRadians(0))
+                                    .build();
+
+                            drive.followTrajectoryAsync(ForwardToShoot);
+                        }
+
 
                         currentMode = Mode.AUTOMATIC_CONTROL;
                     }
