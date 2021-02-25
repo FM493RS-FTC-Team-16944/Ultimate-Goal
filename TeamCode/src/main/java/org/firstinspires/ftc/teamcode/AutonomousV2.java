@@ -151,6 +151,7 @@ public class AutonomousV2 extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
 
+        // TODO: tune the coordinates to make sure they are accurate and reliable
         Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
                 .splineTo(new Vector2d(0,-58),Math.toRadians(0))                 //Go to appropriate distance forward (in front of rings
                 .splineTo(new Vector2d(0,-36), Math.toRadians(0))                //GO to approptiate Distance left (in front of rings)
@@ -207,7 +208,9 @@ public class AutonomousV2 extends LinearOpMode {
         /**Tensor flow start: */
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
-        while ( j < 4000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations)
+
+        // TODO: Tune this value to accuratly describe
+        while ( j < 4000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
