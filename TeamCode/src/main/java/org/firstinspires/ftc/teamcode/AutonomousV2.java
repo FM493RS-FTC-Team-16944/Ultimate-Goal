@@ -178,7 +178,7 @@ public class AutonomousV2 extends LinearOpMode {
 
 
         Trajectory PathZero = drive.trajectoryBuilder(MovetoRings.end())             //ZERO path picks off when the first path ends
-                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
