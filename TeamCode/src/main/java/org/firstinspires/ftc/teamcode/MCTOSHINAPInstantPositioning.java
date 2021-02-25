@@ -23,12 +23,12 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
     Mode currentMode = Mode.DRIVER_CONTROL;
 
     /** The coordinates we want the bot to automatically go to when we press the A button, find the point we want to shoot at */
-    Vector2d targetAVector = new Vector2d(0, -36);
+    Vector2d targetAVector = new Vector2d(-1.5, -36);
 
     // The heading we want the bot to end on for targetA
     double targetAHeading = Math.toRadians(0);
 
-    Pose2d ShootPose = new Pose2d(0,-36, Math.toRadians(0));
+    Pose2d ShootPose = new Pose2d(-1.5,-36, Math.toRadians(0));
 
 
 
@@ -107,7 +107,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                         AutoOn =  !AutoOn;
 
                     if (AutoOn==true) {
-                        LaunchPower = 1;
+                        LaunchPower = 1;      //FOR FULL CHARGED ROBOT
                     } else {
                         LaunchPower = 0;
                     }

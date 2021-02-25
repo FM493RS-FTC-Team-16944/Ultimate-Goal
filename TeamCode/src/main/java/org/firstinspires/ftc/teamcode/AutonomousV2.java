@@ -151,22 +151,42 @@ public class AutonomousV2 extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
 
-        // TODO: tune the coordinates to make sure they are accurate and reliable
+        // TODO: tune the coordinates to make sure they are accurate and reliable for trajectories, especially for shooting
+
         Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
-                .splineTo(new Vector2d(0,-58),Math.toRadians(0))                 //Go to appropriate distance forward (in front of rings
-                .splineToConstantHeading(new Vector2d(0,-36), Math.toRadians(0))                //GO to approptiate Distance left (in front of rings)
+                .splineTo(new Vector2d(3,-58),Math.toRadians(0),               //Go to appropriate distance forward (in front of rings
+
+                        new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
+                .splineToConstantHeading(new Vector2d(3,-40),Math.toRadians(0),               //Go to appropriate distance right for vuforia
+
+                        new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
                 .build();
 
+
         Trajectory PathZero = drive.trajectoryBuilder(MovetoRings.end())             //ZERO path picks off when the first path ends
-                .splineTo(new Vector2d(12,-38), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(44,-36), Math.toRadians(0))                //Move to first square
+                .splineTo(new Vector2d(30,-42), Math.toRadians(180))                //Move to first square
                 .build();
 
         Trajectory PathTwo = drive.trajectoryBuilder(MovetoRings.end())             //TWO path picks off when the first path ends
-                .splineTo(new Vector2d(44,-38), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(55,-48), Math.toRadians(90))                //Move to first square
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
@@ -210,7 +230,7 @@ public class AutonomousV2 extends LinearOpMode {
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
 
         // TODO: Tune this value to accuratly describe
-        while ( j < 4000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
+        while ( j < 3000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -237,7 +257,7 @@ public class AutonomousV2 extends LinearOpMode {
                         }
                     }
 
-                    telemetry.addData("Count: 4,000,000>", j);
+                    telemetry.addData("Count: 3,000,000>", j);
                     telemetry.update();
 
 
@@ -282,13 +302,14 @@ public class AutonomousV2 extends LinearOpMode {
 
             drive.followTrajectory(PathZero);
 
+            // TODO: Make this a seperate method
             sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
             sleep(1500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
-            ArmBase.setPower(0.2);
+            ArmBase.setPower(0.4);
             sleep(1000);
 
             drive.followTrajectory(BackfromZero);
@@ -300,13 +321,14 @@ public class AutonomousV2 extends LinearOpMode {
 
             drive.followTrajectory(PathOne);
 
+            // TODO: Make this a seperate method
             sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
             sleep(1500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
-            ArmBase.setPower(0.2);
+            ArmBase.setPower(0.4);
             sleep(1000);
 
             drive.followTrajectory(BackfromOne);
@@ -317,13 +339,14 @@ public class AutonomousV2 extends LinearOpMode {
 
             drive.followTrajectory(PathTwo);
 
+            // TODO: Make this a seperate method
             sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
             sleep(1500);
             ArmBase.setPower(0);
             Gripper.setPosition(Range.clip(0.5, 0, 1));
             sleep(2000);
-            ArmBase.setPower(0.2);
+            ArmBase.setPower(0.4);
             sleep(1000);
 
             drive.followTrajectory(BackfromTwo);
