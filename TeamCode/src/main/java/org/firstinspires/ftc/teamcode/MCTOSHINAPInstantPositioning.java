@@ -23,15 +23,14 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
     Mode currentMode = Mode.DRIVER_CONTROL;
 
     /** The coordinates we want the bot to automatically go to when we press the A button, find the point we want to shoot at */
-    Vector2d targetAVector = new Vector2d(45, 45);
+    Vector2d targetAVector = new Vector2d(0, -36);
+
     // The heading we want the bot to end on for targetA
-    double targetAHeading = Math.toRadians(90);
+    double targetAHeading = Math.toRadians(0);
 
-    // The location we want the bot to automatically go to when we press the B button
-    Vector2d targetBVector = new Vector2d(-15, 25);
+    Pose2d ShootPose = new Pose2d(0,-36, Math.toRadians(0));
 
-    // The angle we want to align to when we press Y
-    double targetAngle = Math.toRadians(45);
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -184,7 +183,12 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                     Intake.setPower(IntakePower);
                     ArmBase.setPower(ArmPower);
 
-                    if (gamepad1.a) {
+
+                    if(gamepad1.y) {
+                        drive.setPoseEstimate(ShootPose);
+                    }
+
+                    if (gamepad1.a && poseEstimate != ShootPose) {
                         // If the A button is pressed on gamepad1, we generate a splineTo()
                         // trajectory on the fly and follow it
                         // We switch the state to AUTOMATIC_CONTROL
