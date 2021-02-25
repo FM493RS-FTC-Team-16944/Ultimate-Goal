@@ -149,8 +149,7 @@ public class AutonomousV2 extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-58, -58, 0);
         drive.setPoseEstimate(startPose);
-
-
+        private Pose2d returnPlace = new Pose2d(0,0,0);
         // TODO: tune the coordinates to make sure they are accurate and reliable
         Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
                 .splineTo(new Vector2d(0,-58),Math.toRadians(0))                 //Go to appropriate distance forward (in front of rings
@@ -169,18 +168,18 @@ public class AutonomousV2 extends LinearOpMode {
                 .splineTo(new Vector2d(44,-38), Math.toRadians(90))                //Move to first square
                 .build();
 
-        Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
+        Trajectory toLine = drive.trajectoryBuilder(returnPlace)           //Move to the line from ZERO
                 .splineTo(new Vector2d(12,-36), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
+        /*Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
                 .splineTo(new Vector2d(12,-36), Math.toRadians(0))
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
                 .splineTo(new Vector2d(12,-36), Math.toRadians(0))
-                .build();
-
+                .build();*/
+        private Pose2d returnPlace;
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
@@ -278,61 +277,35 @@ public class AutonomousV2 extends LinearOpMode {
 
 
         if (Path==0){
-
-
             drive.followTrajectory(PathZero);
-
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.2);
-            sleep(1000);
-
-            drive.followTrajectory(BackfromZero);
-
-//
-
+            returnPlace = PathZero.end();
+            grabberDownUp()
+            drive.followTrajectory(toLine);
         } else if (Path == 1) {
-
-
             drive.followTrajectory(PathOne);
-
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.2);
-            sleep(1000);
-
-            drive.followTrajectory(BackfromOne);
+            returnPlace = PathOne.end();
+            grabberDownUp();
+            drive.followTrajectory(toLine);
 
 
         } else if (Path == 2) {
-
-
             drive.followTrajectory(PathTwo);
-
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.2);
-            sleep(1000);
-
-            drive.followTrajectory(BackfromTwo);
-
+            returnPlace = PathTwo.end();
+            grabberDownUp();
+            drive.followTrajectory(toLine);
         }
 
+        private void grabberDownUp(){
+			sleep(400);
+			ArmBase.setPower(-0.4);
+			sleep(1500);
+			ArmBase.setPower(0);
+			Gripper.setPosition(Range.clip(0.5, 0, 1));
+			sleep(2000);
+			ArmBase.setPower(0.2);
+			sleep(1000);
 
-
-
+		}
 
 
 
