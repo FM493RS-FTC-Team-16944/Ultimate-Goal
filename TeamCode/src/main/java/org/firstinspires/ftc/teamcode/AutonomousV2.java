@@ -149,7 +149,7 @@ public class AutonomousV2 extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-56, -57, 0);
         drive.setPoseEstimate(startPose);
-
+        Pose endingPose = new Pose2d(0,0,0);
 
         // TODO: tune the coordinates to make sure they are accurate and reliable for trajectories, especially for shooting
 
@@ -189,17 +189,17 @@ public class AutonomousV2 extends LinearOpMode {
                 .splineTo(new Vector2d(55,-48), Math.toRadians(90))                //Move to first square
                 .build();
 
-        Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
+        Trajectory toLine = drive.trajectoryBuilder(endingPose)           //Move to the line from ZERO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
+        /*Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
-                .build();
+                .build();*/
 
 
         /** Wait for the game to begin */
@@ -298,49 +298,27 @@ public class AutonomousV2 extends LinearOpMode {
 
 
         if (Path==0){
-
-
             drive.followTrajectory(PathZero);
-
-            // TODO: Make this a seperate method
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
-
+            endingPose = PathZero.end();
+            grabberUpDown();
             drive.followTrajectory(BackfromZero);
-
-//
-
         } else if (Path == 1) {
-
-
             drive.followTrajectory(PathOne);
-
-            // TODO: Make this a seperate method
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
-
+            endingPose = PathOne.end();
+            grabberUpDown();
             drive.followTrajectory(BackfromOne);
 
 
         } else if (Path == 2) {
-
-
             drive.followTrajectory(PathTwo);
+            endingPose = PathTwo.end();
+            grabberUpDown();
+            drive.followTrajectory(BackfromTwo);
+        }
 
-            // TODO: Make this a seperate method
-            sleep(400);
+        
+       private void grabberUpDown(){
+           sleep(400);
             ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
             sleep(1500);
             ArmBase.setPower(0);
@@ -348,12 +326,7 @@ public class AutonomousV2 extends LinearOpMode {
             sleep(2000);
             ArmBase.setPower(0.4);
             sleep(1000);
-
-            drive.followTrajectory(BackfromTwo);
-
-        }
-
-
+       }
 
 
 
