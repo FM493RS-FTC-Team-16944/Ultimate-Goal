@@ -195,11 +195,20 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
 
                         // TODO: WOrk on this, try to work out spline to spline heading
-                        if(poseEstimate.getX()>-1.5){                                          //If the robot is ahead of the shooting target postiition it is inneficient for it to turn, drive to point, and then turn again, which is why it goes in reverse
-                            Trajectory BacktoShoot = drive.trajectoryBuilder(poseEstimate, true)
+                        if((poseEstimate.getX()>-1.5                                                //If the robot is in front of the line
+                                &&                                                                  //And
+                                ((poseEstimate.getHeading()<(Math.toRadians(90)))                   //It is less than 90deg
+                                        ||                                                          //or
+                                        (poseEstimate.getHeading()>(Math.toRadians(270)))))         //greater than 270 deg
+                        ||(poseEstimate.getX()<1.5                                                  //If the robot is behind the line
+                                &&                                                                  //and
+                                ((poseEstimate.getHeading()>(Math.toRadians(90)))                   //its heading is greater than 90
+                                        &&                                                          //and
+                                        (poseEstimate.getHeading()<(Math.toRadians(270)))))         //less than 270
+                        ) {
+                            Trajectory BacktoShoot = drive.trajectoryBuilder(poseEstimate, true)   //then drive backwards
                                     .splineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)), Math.toRadians(0))
                                     .build();
-
                             drive.followTrajectoryAsync(BacktoShoot);
                         } else{                                                                   //Standard go to point without reverse direction, it is in the else because this is the preferred pattern for unfamiliar cases
                             Trajectory ForwardToShoot = drive.trajectoryBuilder(poseEstimate)
