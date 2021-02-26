@@ -101,17 +101,16 @@ public class AutonomousV2 extends LinearOpMode {
     //End of tf init
 
 
-
     //motion init
     DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, Intake, ArmBase;
     Servo Gripper;
     long Motion;
-    double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
+    double FLPower, FRPower, BLPower, BRPower, xValue, yValue;
+    Pose2d poseEstimtate;
     //end of motion init
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
@@ -153,7 +152,7 @@ public class AutonomousV2 extends LinearOpMode {
         // TODO: tune the coordinates to make sure they are accurate and reliable for trajectories, especially for shooting
 
         Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
-                .splineTo(new Vector2d(3,-58),Math.toRadians(0),               //Go to appropriate distance forward (in front of rings
+                .splineTo(new Vector2d(3, -58), Math.toRadians(0),               //Go to appropriate distance forward (in front of rings
 
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -163,7 +162,7 @@ public class AutonomousV2 extends LinearOpMode {
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
-                .splineToConstantHeading(new Vector2d(3,-40),Math.toRadians(0),               //Go to appropriate distance right for vuforia
+                .splineToConstantHeading(new Vector2d(3, -40), Math.toRadians(0),               //Go to appropriate distance right for vuforia
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -177,18 +176,26 @@ public class AutonomousV2 extends LinearOpMode {
 
 
         Trajectory PathZero = drive.trajectoryBuilder(MovetoRings.end())             //ZERO path picks off when the first path ends
-                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
+                .splineTo(new Vector2d(8, -42), Math.toRadians(90))                //Move to first square v
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(30,-42), Math.toRadians(180))                //Move to first square
+                .splineTo(new Vector2d(30, -42), Math.toRadians(180))                //Move to first square
                 .build();
 
         Trajectory PathTwo = drive.trajectoryBuilder(MovetoRings.end())             //TWO path picks off when the first path ends
-                .splineTo(new Vector2d(55,-48), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(55, -48), Math.toRadians(90))                //Move to first square
                 .build();
 
-        /*Trajectory toLine = drive.trajectoryBuilder(endingPose)           //Move to the line from ZERO
+
+        Trajectory toLine = drive.trajectoryBuilder(poseEstimtate)           //Move to the line from ZERO
+                .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+
+
+        /*
+        Trajectory toLine = drive.trajectoryBuilder(endingPose)           //Move to the line from ZERO
+
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
@@ -198,38 +205,113 @@ public class AutonomousV2 extends LinearOpMode {
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
-                .build();*/
+                .build();
+       */
 
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
         telemetry.update();
-        Gripper.setPosition(Range.clip(0,0,1));
-
-
-
-        waitForStart();
-
+        Gripper.setPosition(Range.clip(0, 0, 1));
 
         // wait for start button.
-
         waitForStart();
 
-
-
-
-       //Start of move in front of rings
+        //Start of move in front of rings
 
         drive.followTrajectory(MovetoRings);
 
         //End of move in front of rings
 
+        int Path = scanRings();
+
+        shootRings();
+
+        if (Path == 0) {
+            drive.followTrajectory(PathZero);
+            grabberUpDown();
+            drive.followTrajectory(toLine);
+        } else if (Path == 1) {
+            drive.followTrajectory(PathOne);
+            grabberUpDown();
+            drive.followTrajectory(toLine);
+        } else if (Path == 2) {
+            drive.followTrajectory(PathTwo);
+            grabberUpDown();
+            drive.followTrajectory(toLine);
+        }
+
+    }
+
+
+    /**
+     * Initialize the Vuforia localization engine.
+     */
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+
+    public void grabberUpDown() {
+        sleep(400);
+        ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
+        sleep(1500);
+        ArmBase.setPower(0);
+        Gripper.setPosition(Range.clip(0.5, 0, 1));
+        sleep(2000);
+        ArmBase.setPower(0.2);
+        sleep(1000);
+    }
+
+    public void shootRings(){
+        //High goal shoot start
+
+        LeftShooter.setPower(1);
+        RightShooter.setPower(-1);
+        sleep(500);
+
+        Intake.setPower(-1);
+
+        sleep(3000);
+
+        LeftShooter.setPower(0);
+        RightShooter.setPower(0);
+        Intake.setPower(0);
+
+        //High goal shoot end
+
+    }
+
+    public int scanRings(){
         /**Tensor flow start: */
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
 
         // TODO: Tune this value to accuratly describe
-        while ( j < 3000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
+        while (j < 3000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -267,7 +349,6 @@ public class AutonomousV2 extends LinearOpMode {
         }
 
 
-
         if (tfod != null) {
             tfod.shutdown();
         }
@@ -277,93 +358,8 @@ public class AutonomousV2 extends LinearOpMode {
 
         /**Tensor flow end */
 
-        //High goal shoot start
-
-        LeftShooter.setPower(1);
-        RightShooter.setPower(-1);
-        sleep(500);
-
-        Intake.setPower(-1);
-
-        sleep(3000);
-
-        LeftShooter.setPower(0);
-        RightShooter.setPower(0);
-        Intake.setPower(0);
-
-//
-
-        //High goal shoot end
-
-
-        if (Path==0){
-            drive.followTrajectory(PathZero);
-            grabberUpDown();
-            toLine(PathZero.end());
-        } else if (Path == 1) {
-            drive.followTrajectory(PathOne);
-            grabberUpDown();
-            toLine(PathOne.end());
-        } else if (Path == 2) {
-            drive.followTrajectory(PathTwo);
-            grabberUpDown();
-            toLine(PathTwo.end());
-        }
-
-        
-       private void grabberUpDown(){
-           sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
-       }
-
-       private void toLine(Pose2d ending){
-           Trajectory toLine = drive.trajectoryBuilder(ending)           //Move to the line from ZERO
-                .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
-                .build();
-           drive.followTrajectory(toLine);
-       }
-
-
-
+        return Path;
 
 
     }
-
-
-        /**
-         * Initialize the Vuforia localization engine.
-         */
-        private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
-        /**
-         * Initialize the TensorFlow Object Detection engine.
-         */
-        private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-    }
-    }
-
+}
