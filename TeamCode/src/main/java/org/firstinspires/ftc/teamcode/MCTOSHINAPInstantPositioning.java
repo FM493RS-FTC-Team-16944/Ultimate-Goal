@@ -46,6 +46,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
         boolean AutoOn = false;
         boolean AutoSwitch = false;
         boolean AutoIn = false;
+        boolean stayLift= false;
         boolean PreviousBumper = false;
         boolean PreviousbuttonX = false;
         boolean PreviousIntake = false;
@@ -122,7 +123,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                     //Start of Gripper Code
                     buttonX = gamepad1.a;
 
-                    if (gamepad1.x)                 //press X once wobble goal has been grabbed to counteract additional weight
+                    if (gamepad1.x||stayLift==true)                 //press X once wobble goal has been grabbed to counteract additional weight
                         ArmPower = -0.1;
                     else ArmPower = 0;
 
@@ -130,6 +131,10 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                         ArmPower = -0.6;
                     if (gamepad1.dpad_up)
                         ArmPower = 0.4;
+                    if(gamepad1.dpad_left)
+                        stayLift=true;
+                    if(gamepad1.dpad_right)
+                        stayLift=false;
 
 
 

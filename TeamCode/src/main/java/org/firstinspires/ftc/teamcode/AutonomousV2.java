@@ -187,26 +187,26 @@ public class AutonomousV2 extends LinearOpMode {
                 .splineTo(new Vector2d(55, -48), Math.toRadians(90))                //Move to first square
                 .build();
 
-
+/*
         Trajectory toLine = drive.trajectoryBuilder(poseEstimtate)           //Move to the line from ZERO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
+*/
 
 
-        /*
-        Trajectory toLine = drive.trajectoryBuilder(endingPose)           //Move to the line from ZERO
+        Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
 
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
+        Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the line from ONE
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
+        Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the line from TWO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
-       */
+
 
 
         /** Wait for the game to begin */
@@ -230,15 +230,15 @@ public class AutonomousV2 extends LinearOpMode {
         if (Path == 0) {
             drive.followTrajectory(PathZero);
             grabberUpDown();
-            drive.followTrajectory(toLine);
+            drive.followTrajectory(BackfromZero);
         } else if (Path == 1) {
             drive.followTrajectory(PathOne);
             grabberUpDown();
-            drive.followTrajectory(toLine);
+            drive.followTrajectory(BackfromOne);
         } else if (Path == 2) {
             drive.followTrajectory(PathTwo);
             grabberUpDown();
-            drive.followTrajectory(toLine);
+            drive.followTrajectory(BackfromTwo);
         }
 
     }
@@ -289,8 +289,8 @@ public class AutonomousV2 extends LinearOpMode {
     public void shootRings(){
         //High goal shoot start
 
-        LeftShooter.setPower(1);
-        RightShooter.setPower(-1);
+        LeftShooter.setPower(1.0);
+        RightShooter.setPower(-1.0);
         sleep(500);
 
         Intake.setPower(-1);
