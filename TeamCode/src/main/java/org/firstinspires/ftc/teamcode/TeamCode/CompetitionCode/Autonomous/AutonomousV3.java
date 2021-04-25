@@ -56,8 +56,8 @@ public class AutonomousV3 extends LinearOpMode {
 
 
     //motion init
-    DcMotor FrontLeftDrive, FrontRightDrive, BackLeftDrive, BackRightDrive, LeftShooter, RightShooter, Intake, ArmBase;
-    Servo Gripper;
+    DcMotor LeftShooter, RightShooter, Intake, ArmBase;
+    Servo GripperA, GripperB;
     long Motion;
     double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
     //end of motion init
@@ -71,7 +71,8 @@ public class AutonomousV3 extends LinearOpMode {
         RightShooter = hardwareMap.dcMotor.get("RightShooter");
         Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
-        Gripper = hardwareMap.servo.get("Gripper");
+        GripperA = hardwareMap.servo.get("GripperA");
+        GripperB = hardwareMap.servo.get("GripperB");
 
 
         telemetry.addData("Mode", "waiting");
@@ -106,8 +107,8 @@ public class AutonomousV3 extends LinearOpMode {
 
         // TODO: tune the coordinates to make sure they are accurate and reliable for trajectories, especially for shooting
 
-        Trajectory MovetoRings = drive.trajectoryBuilder(startPose)                  //Moving to rings path
-                .splineTo(new Vector2d(3,-58),Math.toRadians(0),               //Go to appropriate distance forward (in front of rings
+        Trajectory BeforeShooting = drive.trajectoryBuilder(startPose)                  //Moving to rings path
+                .lineToSplineHeading(new Pose2d(-8,-55,Math.toRadians(20)),               //Go to appropriate distance forward (in front of rings
 
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -117,7 +118,25 @@ public class AutonomousV3 extends LinearOpMode {
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
-                .splineToConstantHeading(new Vector2d(3,-40),Math.toRadians(0),               //Go to appropriate distance right for vuforia
+                .build();
+
+        Trajectory DuringShooting = drive.trajectoryBuilder(BeforeShooting.end())
+
+                .lineToSplineHeading(new Pose2d(-8, -56, Math.toRadians(45)),               //Go to appropriate distance right for vuforia
+
+                        new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
+                .build();
+
+        Trajectory MovetoRings = drive.trajectoryBuilder(DuringShooting.end())
+
+                .splineToLinearHeading(new Pose2d(3,-40),Math.toRadians(0),               //Go to appropriate distance right for vuforia
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -135,22 +154,22 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(30,-42), Math.toRadians(180))                //Move to first square
+                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to first square
                 .build();
 
         Trajectory PathTwo = drive.trajectoryBuilder(MovetoRings.end())             //TWO path picks off when the first path ends
-                .splineTo(new Vector2d(55,-48), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to first square
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromOne = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ONE
+        Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the line from ONE
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromTwo = drive.trajectoryBuilder(PathZero.end())          //Move to the line from TWO
+        Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the line from TWO
                 .splineToSplineHeading(new Pose2d(12, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
@@ -158,7 +177,8 @@ public class AutonomousV3 extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
         telemetry.update();
-        Gripper.setPosition(Range.clip(0,0,1));
+        GripperA.setPosition(Range.clip(0,0,1));
+        GripperB.setPosition(Range.clip(0,0,1));
 
 
 
@@ -170,9 +190,20 @@ public class AutonomousV3 extends LinearOpMode {
         waitForStart();
 
 
-
-
         //Start of move in front of rings
+
+        drive.followTrajectory(BeforeShooting);
+
+        LeftShooter.setPower(1);
+        RightShooter.setPower(-1);
+        sleep(500);
+        Intake.setPower(-1);
+
+        drive.followTrajectory(DuringShooting);
+
+        LeftShooter.setPower(0);
+        RightShooter.setPower(0);
+        Intake.setPower(0);
 
         drive.followTrajectory(MovetoRings);
 
@@ -182,8 +213,7 @@ public class AutonomousV3 extends LinearOpMode {
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
 
-        // TODO: Tune this value to accuratly describe
-        while ( j < 3000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
+        while ( j < 2000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -210,7 +240,7 @@ public class AutonomousV3 extends LinearOpMode {
                         }
                     }
 
-                    telemetry.addData("Count: 3,000,000>", j);
+                    telemetry.addData("Count: 2,000,000>", j);
                     telemetry.update();
 
 
@@ -219,7 +249,6 @@ public class AutonomousV3 extends LinearOpMode {
 
             j++;                                                                //Increases Loop Count
         }
-
 
 
         if (tfod != null) {
@@ -231,39 +260,13 @@ public class AutonomousV3 extends LinearOpMode {
 
         /**Tensor flow end */
 
-        //High goal shoot start
-
-        LeftShooter.setPower(1);
-        RightShooter.setPower(-1);
-        sleep(500);
-
-        Intake.setPower(-1);
-
-        sleep(3000);
-
-        LeftShooter.setPower(0);
-        RightShooter.setPower(0);
-        Intake.setPower(0);
-
-//
-
-        //High goal shoot end
-
 
         if (Path==0){
 
 
             drive.followTrajectory(PathZero);
 
-            // TODO: Make this a seperate method
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
+            dropGoal();
 
             drive.followTrajectory(BackfromZero);
 
@@ -274,15 +277,7 @@ public class AutonomousV3 extends LinearOpMode {
 
             drive.followTrajectory(PathOne);
 
-            // TODO: Make this a seperate method
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
+            dropGoal();
 
             drive.followTrajectory(BackfromOne);
 
@@ -292,26 +287,11 @@ public class AutonomousV3 extends LinearOpMode {
 
             drive.followTrajectory(PathTwo);
 
-            // TODO: Make this a seperate method
-            sleep(400);
-            ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
-            sleep(1500);
-            ArmBase.setPower(0);
-            Gripper.setPosition(Range.clip(0.5, 0, 1));
-            sleep(2000);
-            ArmBase.setPower(0.4);
-            sleep(1000);
+            dropGoal();
 
             drive.followTrajectory(BackfromTwo);
 
         }
-
-
-
-
-
-
-
 
 
     }
@@ -346,4 +326,35 @@ public class AutonomousV3 extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
+
+    private void dropGoal(){
+        sleep(400);
+        ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
+        sleep(1500);
+        ArmBase.setPower(0);
+        GripperA.setPosition(Range.clip(0.5, 0, 1));
+        GripperB.setPosition(Range.clip(0.5, 0, 1));
+        sleep(2000);
+        ArmBase.setPower(0.4);
+        sleep(1000);
+    }
+
+    private void shootRings(){
+
+        LeftShooter.setPower(1);
+        RightShooter.setPower(-1);
+        sleep(500);
+
+        Intake.setPower(-1);
+
+        sleep(3000);
+
+        LeftShooter.setPower(0);
+        RightShooter.setPower(0);
+        Intake.setPower(0);
+    }
+
+
+
+
 }

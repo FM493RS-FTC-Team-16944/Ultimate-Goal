@@ -41,7 +41,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
         DcMotor  LeftShooter, RightShooter, ArmBase, Intake;
         //TouchSensor Touch;
-        Servo Gripper;
+        Servo Gripper, GripperB;
         double ConstRes, IntakePower;
         double LaunchPower;
         boolean LeftBumper, buttonX, RightBumper;
@@ -67,7 +67,8 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
         RightShooter = hardwareMap.dcMotor.get("RightShooter");
         Intake = hardwareMap.dcMotor.get("Intake");
         ArmBase = hardwareMap.dcMotor.get("ArmBase");
-        Gripper = hardwareMap.servo.get("Gripper");
+        Gripper = hardwareMap.servo.get("GripperA");
+        GripperB = hardwareMap.servo.get("GripperB");
         ArmBase.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LeftShooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -147,8 +148,10 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
                     if (AutoSwitch==true) {
                         Gripper.setPosition(Range.clip(0, 0, 1));
+                        GripperB.setPosition(Range.clip(0, 0, 1));
                     } else {
                         Gripper.setPosition(Range.clip(0.5, 0, 1));
+                        GripperB.setPosition(Range.clip(0.5, 0, 1));
                     }
 
                     PreviousbuttonX = buttonX;
