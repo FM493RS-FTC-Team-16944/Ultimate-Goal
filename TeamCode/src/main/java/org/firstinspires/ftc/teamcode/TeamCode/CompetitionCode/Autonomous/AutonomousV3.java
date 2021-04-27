@@ -122,11 +122,21 @@ public class AutonomousV3 extends LinearOpMode {
 
         Trajectory DuringShooting = drive.trajectoryBuilder(BeforeShooting.end())
 
-                .lineToSplineHeading(new Pose2d(-8, -56, Math.toRadians(45)),               //Go to appropriate distance right for vuforia
+                .lineToSplineHeading(new Pose2d(-8, -54, Math.toRadians(30)),               //Go to appropriate distance right for vuforia
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
+                .lineToSplineHeading(new Pose2d(-8, -53.75, Math.toRadians(40)),               //Go to appropriate distance right for vuforia
+
+                        new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(Math.toRadians(3000)),              //Restricts angular velocity to ~60%, to make shooting more even
                                         new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
@@ -194,8 +204,8 @@ public class AutonomousV3 extends LinearOpMode {
 
         drive.followTrajectory(BeforeShooting);
 
-        LeftShooter.setPower(1);
-        RightShooter.setPower(-1);
+        LeftShooter.setPower(0.95);
+        RightShooter.setPower(-0.95);
         sleep(500);
         Intake.setPower(-1);
 
