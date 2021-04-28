@@ -130,14 +130,18 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                         ArmPower = 0.4;
                     else ArmPower = 0;
 
-                    if (gamepad1.dpad_down)
-                        ArmPower = -0.6;
-                    if (gamepad1.dpad_up)
+                    if (gamepad1.dpad_down){
+                        ArmPower = -0.3;
+                        stayLift=false;
+                    }
+                    if (gamepad1.dpad_up){
                         ArmPower = 0.4;
+                        stayLift=false;
+                    }
                     if(gamepad1.dpad_left)
                         stayLift=true;
                     if(gamepad1.dpad_right)
-                        stayLift=false;
+                        ArmPower=-0.3;
 
 
 
@@ -148,10 +152,10 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
                     if (AutoSwitch==true) {
                         Gripper.setPosition(Range.clip(0, 0, 1));
-                        GripperB.setPosition(Range.clip(0, 0, 1));
+                        GripperB.setPosition(Range.clip(0.5, 0, 1));
                     } else {
                         Gripper.setPosition(Range.clip(0.5, 0, 1));
-                        GripperB.setPosition(Range.clip(0.5, 0, 1));
+                        GripperB.setPosition(Range.clip(0, 0, 1));
                     }
 
                     PreviousbuttonX = buttonX;

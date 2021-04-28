@@ -132,7 +132,7 @@ public class AutonomousV3 extends LinearOpMode {
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
-                .lineToSplineHeading(new Pose2d(-8, -53.75, Math.toRadians(40)),               //Go to appropriate distance right for vuforia
+                .lineToSplineHeading(new Pose2d(-8, -53.5, Math.toRadians(40)),               //Go to appropriate distance right for vuforia
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -188,7 +188,8 @@ public class AutonomousV3 extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
         telemetry.update();
         GripperA.setPosition(Range.clip(0,0,1));
-        GripperB.setPosition(Range.clip(0,0,1));
+        GripperB.setPosition(Range.clip(0.5, 0, 1));
+
 
 
 
@@ -343,7 +344,8 @@ public class AutonomousV3 extends LinearOpMode {
         sleep(1500);
         ArmBase.setPower(0);
         GripperA.setPosition(Range.clip(0.5, 0, 1));
-        GripperB.setPosition(Range.clip(0.5, 0, 1));
+        GripperB.setPosition(Range.clip(0,0,1));
+
         sleep(2000);
         ArmBase.setPower(0.4);
         sleep(1000);
