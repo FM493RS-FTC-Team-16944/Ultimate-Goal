@@ -186,7 +186,18 @@ public class AutonomousV3 extends LinearOpMode {
         Trajectory Picking = drive.trajectoryBuilder(BackfromZero.end())            //Move the robot to make contact with second wobble goal
                 .lineToConstantHeading(new Vector2d(-30,-25))
                 .build();
+        
+    Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first path ends
+                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
+                .build();
 
+        Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first path ends
+                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to first square
+                .build();
+
+        Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first path ends
+                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to first square
+                .build();
 
 
         /** Wait for the game to begin */
