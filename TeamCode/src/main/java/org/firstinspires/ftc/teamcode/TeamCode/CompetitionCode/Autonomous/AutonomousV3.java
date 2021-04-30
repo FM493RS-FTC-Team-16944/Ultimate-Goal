@@ -187,16 +187,28 @@ public class AutonomousV3 extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(-30,-25))
                 .build();
         
-    Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first path ends
+        Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first picking ends
                 .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
                 .build();
 
-        Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to first square
+        Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first picking ends
+                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to second square
                 .build();
 
-        Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first path ends
-                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to first square
+        Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first picking ends
+                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to third square
+                .build();
+
+        Trajectory toLineZero = drive.trajectoryBuilder(PathZeroB.end())           //Move to the line from ZERO
+                .splineToLinearHeading(new Pose2d(0, -15, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+
+        Trajectory toLineOne = drive.trajectoryBuilder(PathOneB.end())           //Move to the line from ONE
+                .splineToLinearHeading(new Pose2d(0, -15, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+
+        Trajectory toLineTwo = drive.trajectoryBuilder(PathTwoB.end())          //Move to the line from TWO
+                .splineToLinearHeading(new Pose2d(0, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
 
@@ -285,17 +297,14 @@ public class AutonomousV3 extends LinearOpMode {
 
         if (Path==0){
 
-
             drive.followTrajectory(PathZero);
 
             dropGoal();
 
             drive.followTrajectory(BackfromZero);
 
-//
 
         } else if (Path == 1) {
-
 
             drive.followTrajectory(PathOne);
 
@@ -303,9 +312,7 @@ public class AutonomousV3 extends LinearOpMode {
 
             drive.followTrajectory(BackfromOne);
 
-
         } else if (Path == 2) {
-
 
             drive.followTrajectory(PathTwo);
 
@@ -321,6 +328,33 @@ public class AutonomousV3 extends LinearOpMode {
 
         pickGoalPhaseB();
 
+
+        if (Path==0){
+
+            drive.followTrajectory(PathZeroB);
+
+            dropGoal();
+
+            drive.followTrajectory(toLineZero);
+
+
+        } else if (Path == 1) {
+
+            drive.followTrajectory(PathOneB);
+
+            dropGoal();
+
+            drive.followTrajectory(toLineOne);
+
+        } else if (Path == 2) {
+
+            drive.followTrajectory(PathTwoB);
+
+            dropGoal();
+
+            drive.followTrajectory(toLineTwo);
+
+        }
     }
 
 
