@@ -172,15 +172,15 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
-                .splineToLinearHeading(new Pose2d(-36, -15, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the line from ONE
-                .splineToLinearHeading(new Pose2d(-36, -15, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the line from TWO
-                .splineToLinearHeading(new Pose2d(-36, -15, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
 
