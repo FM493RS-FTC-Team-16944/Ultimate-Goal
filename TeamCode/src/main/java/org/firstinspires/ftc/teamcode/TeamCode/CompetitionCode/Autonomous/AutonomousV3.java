@@ -151,7 +151,7 @@ public class AutonomousV3 extends LinearOpMode {
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
+                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -183,6 +183,11 @@ public class AutonomousV3 extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
+        Trajectory Picking = drive.trajectoryBuilder(BackfromZero.end())            //Move the robot to make contact with second wobble goal
+                .lineToConstantHeading(new Vector2d(-30,-25))
+                .build();
+
+
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
@@ -205,16 +210,11 @@ public class AutonomousV3 extends LinearOpMode {
 
         drive.followTrajectory(BeforeShooting);
 
-        LeftShooter.setPower(0.95);
-        RightShooter.setPower(-0.95);
-        sleep(500);
-        Intake.setPower(-1);
+        shootRingsPhaseA();
 
         drive.followTrajectory(DuringShooting);
 
-        LeftShooter.setPower(0);
-        RightShooter.setPower(0);
-        Intake.setPower(0);
+        shootRingsPhaseB();
 
         drive.followTrajectory(MovetoRings);
 
@@ -304,6 +304,11 @@ public class AutonomousV3 extends LinearOpMode {
 
         }
 
+        pickGoalPhaseA();
+
+        drive.followTrajectory(Picking);
+
+        pickGoalPhaseB();
 
     }
 
@@ -346,22 +351,37 @@ public class AutonomousV3 extends LinearOpMode {
         GripperA.setPosition(Range.clip(0.5, 0, 1));
         GripperB.setPosition(Range.clip(0,0,1));
 
-        sleep(2000);
+        sleep(1000);
         ArmBase.setPower(0.4);
         sleep(1000);
     }
 
-    private void shootRings(){
+    private void pickGoalPhaseA(){
+        ArmBase.setPower(-0.4);                                                       //Brings Arm down
+        sleep(1500);
+        ArmBase.setPower(0);
+    }
 
-        LeftShooter.setPower(1);
-        RightShooter.setPower(-1);
+    private void pickGoalPhaseB(){
+        GripperA.setPosition(Range.clip(0,0,1));                  // Grabs and lifts arm
+        GripperB.setPosition(Range.clip(0.5, 0, 1));
+
+        sleep(1000);
+        ArmBase.setPower(0.4);
         sleep(500);
+    }
 
+    private void shootRingsPhaseA(){
+
+        LeftShooter.setPower(0.95);                                                //Sets motor powers for shooting
+        RightShooter.setPower(-0.95);
+        sleep(500);
         Intake.setPower(-1);
 
-        sleep(3000);
+    }
 
-        LeftShooter.setPower(0);
+    private void shootRingsPhaseB(){
+        LeftShooter.setPower(0);                                               //Shuts down motors after shooting
         RightShooter.setPower(0);
         Intake.setPower(0);
     }
