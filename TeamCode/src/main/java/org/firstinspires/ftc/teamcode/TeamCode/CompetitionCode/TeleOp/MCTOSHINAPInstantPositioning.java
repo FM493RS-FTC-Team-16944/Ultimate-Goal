@@ -221,12 +221,12 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                                         (poseEstimate.getHeading()<(Math.toRadians(270)))))         //less than 270
                         ) {
                             Trajectory BacktoShoot = drive.trajectoryBuilder(poseEstimate, true)   //then drive backwards
-                                    .splineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)), Math.toRadians(0))
+                                    .lineToSplineHeading(new Pose2d(-1.5, -36,Math.toRadians(0)))
                                     .build();
                             drive.followTrajectoryAsync(BacktoShoot);
                         } else{                                                                   //Standard go to point without reverse direction, it is in the else because this is the preferred pattern for unfamiliar cases
                             Trajectory ForwardToShoot = drive.trajectoryBuilder(poseEstimate)
-                                    .splineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)), Math.toRadians(0))
+                                    .lineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)))
                                     .build();
 
                             drive.followTrajectoryAsync(ForwardToShoot);

@@ -172,22 +172,52 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the wobble goal from ZERO
-                .splineToSplineHeading(new Pose2d(-5,-14), Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
+                        new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
                 .build();
 
         Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the wobble goal from ONE
-                .splineToSplineHeading(new Pose2d(-5,-14),Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
+                        new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the wobble goal from TWO
-                .splineToSplineHeading(new Pose2d(-5,-14),Math.toRadians(45))
-                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
+                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
+                        new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         Trajectory Picking = drive.trajectoryBuilder(BackfromZero.end())            //Move the robot to make contact with second wobble goal
-                .lineToConstantHeading(new Vector2d(-32,-22))
+                .lineToConstantHeading(new Vector2d(-36,-22),
+                        new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
+                                Arrays.asList(
+                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                        new MecanumVelocityConstraint(25, DriveConstants.TRACK_WIDTH)
+                                )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
                 .build();
         
         Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first picking ends
