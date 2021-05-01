@@ -136,7 +136,7 @@ public class AutonomousV3 extends LinearOpMode {
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
-                                        new AngularVelocityConstraint(Math.toRadians(3000)),              //Restricts angular velocity to ~60%, to make shooting more even
+                                        new AngularVelocityConstraint(Math.toRadians(2500)),              //Restricts angular velocity to ~50%, to make shooting more even
                                         new MecanumVelocityConstraint(20, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
@@ -164,27 +164,30 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to first square
+                .splineTo(new Vector2d(25,-42), Math.toRadians(179))                //Move to first square
                 .build();
 
         Trajectory PathTwo = drive.trajectoryBuilder(MovetoRings.end())             //TWO path picks off when the first path ends
                 .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to first square
                 .build();
 
-        Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the line from ZERO
+        Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the wobble goal from ZERO
+                .splineToSplineHeading(new Pose2d(-5,-14), Math.toRadians(45))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the line from ONE
+        Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the wobble goal from ONE
+                .splineToSplineHeading(new Pose2d(-5,-14),Math.toRadians(45))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
-        Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the line from TWO
+        Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the wobble goal from TWO
+                .splineToSplineHeading(new Pose2d(-5,-14),Math.toRadians(45))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0))
                 .build();
 
         Trajectory Picking = drive.trajectoryBuilder(BackfromZero.end())            //Move the robot to make contact with second wobble goal
-                .lineToConstantHeading(new Vector2d(-30,-25))
+                .lineToConstantHeading(new Vector2d(-32,-22))
                 .build();
         
         Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first picking ends
@@ -192,7 +195,7 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first picking ends
-                .splineTo(new Vector2d(25,-42), Math.toRadians(180))                //Move to second square
+                .splineTo(new Vector2d(25,-42), Math.toRadians(179))                //Move to second square
                 .build();
 
         Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first picking ends
