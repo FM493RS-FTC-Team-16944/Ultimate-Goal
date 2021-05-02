@@ -177,7 +177,7 @@ public class AutonomousV3 extends LinearOpMode {
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                        new MecanumVelocityConstraint(25, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -190,7 +190,7 @@ public class AutonomousV3 extends LinearOpMode {
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                        new MecanumVelocityConstraint(25, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -202,7 +202,7 @@ public class AutonomousV3 extends LinearOpMode {
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(30, DriveConstants.TRACK_WIDTH)
+                                        new MecanumVelocityConstraint(25, DriveConstants.TRACK_WIDTH)
                                 )
                         ),
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -225,11 +225,11 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first picking ends
-                .splineTo(new Vector2d(25,-42), Math.toRadians(179))                //Move to second square
+                .splineTo(new Vector2d(18,-42), Math.toRadians(179))                //Move to second square
                 .build();
 
         Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first picking ends
-                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to third square
+                .splineTo(new Vector2d(48,-42), Math.toRadians(90))                //Move to third square
                 .build();
 
         Trajectory toLineZero = drive.trajectoryBuilder(PathZeroB.end())           //Move to the line from ZERO
