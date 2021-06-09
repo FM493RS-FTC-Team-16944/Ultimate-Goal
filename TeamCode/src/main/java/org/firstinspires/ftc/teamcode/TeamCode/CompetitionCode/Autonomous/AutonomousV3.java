@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@Autonomous(name="AutonomousV3", group="Autonomous")
+@Autonomous(name = "AutonomousV3", group = "Autonomous")
 
 public class AutonomousV3 extends LinearOpMode {
 
@@ -54,17 +54,15 @@ public class AutonomousV3 extends LinearOpMode {
     //End of tf init
 
 
-
     //motion init
     DcMotor LeftShooter, RightShooter, Intake, ArmBase;
     Servo GripperA, GripperB;
     long Motion;
-    double   FLPower, FRPower, BLPower, BRPower,xValue, yValue;
+    double FLPower, FRPower, BLPower, BRPower, xValue, yValue;
     //end of motion init
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         LeftShooter = hardwareMap.dcMotor.get("LeftShooter");
@@ -108,7 +106,7 @@ public class AutonomousV3 extends LinearOpMode {
         // TODO: tune the coordinates to make sure they are accurate and reliable for trajectories, especially for shooting
 
         Trajectory BeforeShooting = drive.trajectoryBuilder(startPose)                  //Moving to rings path
-                .lineToSplineHeading(new Pose2d(-8,-55,Math.toRadians(20)),               //Go to appropriate distance forward (in front of rings
+                .lineToSplineHeading(new Pose2d(-8, -55, Math.toRadians(20)),               //Go to appropriate distance forward (in front of rings
 
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -146,7 +144,7 @@ public class AutonomousV3 extends LinearOpMode {
 
         Trajectory MovetoRings = drive.trajectoryBuilder(DuringShooting.end())
 
-                .splineToLinearHeading(new Pose2d(3,-40),Math.toRadians(0),               //Go to appropriate distance right for vuforia
+                .splineToLinearHeading(new Pose2d(3, -40), Math.toRadians(0),               //Go to appropriate distance right for vuforia
 
                         new MinVelocityConstraint(                                                  //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -160,19 +158,19 @@ public class AutonomousV3 extends LinearOpMode {
 
 
         Trajectory PathZero = drive.trajectoryBuilder(MovetoRings.end())             //ZERO path picks off when the first path ends
-                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
+                .splineTo(new Vector2d(8, -42), Math.toRadians(90))                //Move to first square v
                 .build();
 
         Trajectory PathOne = drive.trajectoryBuilder(MovetoRings.end())             //ONE path picks off when the first path ends
-                .splineTo(new Vector2d(25,-42), Math.toRadians(179))                //Move to first square
+                .splineTo(new Vector2d(25, -42), Math.toRadians(179))                //Move to first square
                 .build();
 
         Trajectory PathTwo = drive.trajectoryBuilder(MovetoRings.end())             //TWO path picks off when the first path ends
-                .splineTo(new Vector2d(55,-42), Math.toRadians(90))                //Move to first square
+                .splineTo(new Vector2d(55, -42), Math.toRadians(90))                //Move to first square
                 .build();
 
         Trajectory BackfromZero = drive.trajectoryBuilder(PathZero.end())           //Move to the wobble goal from ZERO
-                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-10, -17, Math.toRadians(0)))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -185,7 +183,7 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory BackfromOne = drive.trajectoryBuilder(PathOne.end())           //Move to the wobble goal from ONE
-                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-10, -17, Math.toRadians(0)))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -197,7 +195,7 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory BackfromTwo = drive.trajectoryBuilder(PathTwo.end())          //Move to the wobble goal from TWO
-                .lineToSplineHeading(new Pose2d(-10,-17,Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-10, -17, Math.toRadians(0)))
                 .splineToLinearHeading(new Pose2d(-30, -15, Math.toRadians(0)), Math.toRadians(0),
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
@@ -209,7 +207,7 @@ public class AutonomousV3 extends LinearOpMode {
                 .build();
 
         Trajectory Picking = drive.trajectoryBuilder(BackfromZero.end())            //Move the robot to make contact with second wobble goal
-                .lineToConstantHeading(new Vector2d(-36,-22),
+                .lineToConstantHeading(new Vector2d(-36, -22),
                         new MinVelocityConstraint(                                      //Restricts the speed of the robot to increase accuracy
                                 Arrays.asList(
                                         new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -219,17 +217,17 @@ public class AutonomousV3 extends LinearOpMode {
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
-        
+
         Trajectory PathZeroB = drive.trajectoryBuilder(Picking.end())             //ZERO path picks off when the first picking ends
-                .splineTo(new Vector2d(8,-42), Math.toRadians(90))                //Move to first square v
+                .splineTo(new Vector2d(8, -42), Math.toRadians(90))                //Move to first square v
                 .build();
 
         Trajectory PathOneB = drive.trajectoryBuilder(Picking.end())             //ONE path picks off when the first picking ends
-                .splineTo(new Vector2d(18,-42), Math.toRadians(179))                //Move to second square
+                .splineTo(new Vector2d(18, -42), Math.toRadians(179))                //Move to second square
                 .build();
 
         Trajectory PathTwoB = drive.trajectoryBuilder(Picking.end())             //TWO path picks off when the first picking ends
-                .splineTo(new Vector2d(48,-42), Math.toRadians(90))                //Move to third square
+                .splineTo(new Vector2d(48, -42), Math.toRadians(90))                //Move to third square
                 .build();
 
         Trajectory toLineZero = drive.trajectoryBuilder(PathZeroB.end())           //Move to the line from ZERO
@@ -248,10 +246,8 @@ public class AutonomousV3 extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode, servos have been set");
         telemetry.update();
-        GripperA.setPosition(Range.clip(0,0,1));
+        GripperA.setPosition(Range.clip(0, 0, 1));
         GripperB.setPosition(Range.clip(0.5, 0, 1));
-
-
 
 
         waitForStart();
@@ -280,7 +276,7 @@ public class AutonomousV3 extends LinearOpMode {
         long j = 0;
         int Path = 0;                                          //Base value, end path should be =! 0 if a path is detected
 
-        while ( j < 2000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
+        while (j < 2000000) {                //Makes sure that a proper path is returned, if no new value exists, the robot will exit after a set ammount of elapsed time (Determined by # of iterations) T
 
             if (tfod != null) {
                 // getUpdatedjRecognitions() will return null if no new information is available since
@@ -328,7 +324,7 @@ public class AutonomousV3 extends LinearOpMode {
         /**Tensor flow end */
 
 
-        if (Path==0){
+        if (Path == 0) {
 
             drive.followTrajectory(PathZero);
 
@@ -362,7 +358,7 @@ public class AutonomousV3 extends LinearOpMode {
         pickGoalPhaseB();
 
 
-        if (Path==0){
+        if (Path == 0) {
 
             drive.followTrajectory(PathZeroB);
 
@@ -421,27 +417,27 @@ public class AutonomousV3 extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-    private void dropGoal(){
+    private void dropGoal() {
         sleep(400);
         ArmBase.setPower(-0.4);                                                       //Drops off the wobble goal
         sleep(1500);
         ArmBase.setPower(0);
         GripperA.setPosition(Range.clip(0.5, 0, 1));
-        GripperB.setPosition(Range.clip(0,0,1));
+        GripperB.setPosition(Range.clip(0, 0, 1));
 
         sleep(1000);
         ArmBase.setPower(0.4);
         sleep(1000);
     }
 
-    private void pickGoalPhaseA(){
+    private void pickGoalPhaseA() {
         ArmBase.setPower(-0.4);                                                       //Brings Arm down
         sleep(1500);
         ArmBase.setPower(0);
     }
 
-    private void pickGoalPhaseB(){
-        GripperA.setPosition(Range.clip(0,0,1));                  // Grabs and lifts arm
+    private void pickGoalPhaseB() {
+        GripperA.setPosition(Range.clip(0, 0, 1));                  // Grabs and lifts arm
         GripperB.setPosition(Range.clip(0.5, 0, 1));
 
         sleep(1000);
@@ -449,7 +445,7 @@ public class AutonomousV3 extends LinearOpMode {
         sleep(500);
     }
 
-    private void shootRingsPhaseA(){
+    private void shootRingsPhaseA() {
 
         LeftShooter.setPower(0.95);                                                //Sets motor powers for shooting
         RightShooter.setPower(-0.95);
@@ -458,13 +454,11 @@ public class AutonomousV3 extends LinearOpMode {
 
     }
 
-    private void shootRingsPhaseB(){
+    private void shootRingsPhaseB() {
         LeftShooter.setPower(0);                                               //Shuts down motors after shooting
         RightShooter.setPower(0);
         Intake.setPower(0);
     }
-
-
 
 
 }

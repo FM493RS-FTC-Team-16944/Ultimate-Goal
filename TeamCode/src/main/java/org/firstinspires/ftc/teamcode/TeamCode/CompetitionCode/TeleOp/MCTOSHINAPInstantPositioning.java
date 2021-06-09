@@ -24,14 +24,15 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
     Mode currentMode = Mode.DRIVER_CONTROL;
 
-    /** The coordinates we want the bot to automatically go to when we press the A button, find the point we want to shoot at */
+    /**
+     * The coordinates we want the bot to automatically go to when we press the A button, find the point we want to shoot at
+     */
     Vector2d targetAVector = new Vector2d(-1.5, -36);
 
     // The heading we want the bot to end on for targetA
     double targetAHeading = Math.toRadians(0);
 
-    Pose2d ShootPose = new Pose2d(-1.5,-36, Math.toRadians(0));
-
+    Pose2d ShootPose = new Pose2d(-1.5, -36, Math.toRadians(0));
 
 
     @Override
@@ -39,7 +40,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
         // Initialize custom cancelable SampleMecanumDrive class
         SampleMecanumDriveCancelable drive = new SampleMecanumDriveCancelable(hardwareMap);
 
-        DcMotor  LeftShooter, RightShooter, ArmBase, Intake;
+        DcMotor LeftShooter, RightShooter, ArmBase, Intake;
         //TouchSensor Touch;
         Servo Gripper, GripperB;
         double ConstRes, IntakePower;
@@ -48,7 +49,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
         boolean AutoOn = false;
         boolean AutoSwitch = false;
         boolean AutoIn = false;
-        boolean stayLift= false;
+        boolean stayLift = false;
         boolean PreviousBumper = false;
         boolean PreviousbuttonX = false;
         boolean PreviousIntake = false;
@@ -107,17 +108,17 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
                     LeftBumper = gamepad1.left_bumper;
 
-                    if (LeftBumper == true&&LeftBumper!=PreviousBumper)
-                        AutoOn =  !AutoOn;
+                    if (LeftBumper == true && LeftBumper != PreviousBumper)
+                        AutoOn = !AutoOn;
 
-                    if (AutoOn==true) {
+                    if (AutoOn == true) {
                         LaunchPower = 1;      //FOR FULL CHARGED ROBOT
                     } else {
                         LaunchPower = 0;
                     }
 
-                    if(gamepad1.left_trigger != 0)
-                        LaunchPower =  gamepad1.left_trigger;
+                    if (gamepad1.left_trigger != 0)
+                        LaunchPower = gamepad1.left_trigger;
 
                     PreviousBumper = LeftBumper;
 
@@ -126,31 +127,30 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                     //Start of Gripper Code
                     buttonX = gamepad1.a;
 
-                    if (stayLift==true)                 //press stayLift once wobble goal has been grabbed to counteract additional weight
+                    if (stayLift == true)                 //press stayLift once wobble goal has been grabbed to counteract additional weight
                         ArmPower = 0.4;
                     else ArmPower = 0;
 
-                    if (gamepad1.dpad_down){
+                    if (gamepad1.dpad_down) {
                         ArmPower = -0.3;
-                        stayLift=false;
+                        stayLift = false;
                     }
-                    if (gamepad1.dpad_up){
+                    if (gamepad1.dpad_up) {
                         ArmPower = 0.4;
-                        stayLift=false;
+                        stayLift = false;
                     }
-                    if(gamepad1.dpad_left)
-                        stayLift=true;
-                    if(gamepad1.dpad_right)
-                        ArmPower=-0.3;
-
+                    if (gamepad1.dpad_left)
+                        stayLift = true;
+                    if (gamepad1.dpad_right)
+                        ArmPower = -0.3;
 
 
                     buttonX = gamepad1.x;
 
-                    if (buttonX == true&&buttonX!=PreviousbuttonX)
-                        AutoSwitch =  !AutoSwitch;
+                    if (buttonX == true && buttonX != PreviousbuttonX)
+                        AutoSwitch = !AutoSwitch;
 
-                    if (AutoSwitch==true) {
+                    if (AutoSwitch == true) {
                         Gripper.setPosition(Range.clip(0, 0, 1));
                         GripperB.setPosition(Range.clip(0.5, 0, 1));
                     } else {
@@ -166,27 +166,27 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
                     RightBumper = gamepad1.right_bumper;
 
-                    if (RightBumper == true&&RightBumper!=PreviousIntake)
-                        AutoIn =  !AutoIn;
+                    if (RightBumper == true && RightBumper != PreviousIntake)
+                        AutoIn = !AutoIn;
 
-                    if (AutoIn==true) {
+                    if (AutoIn == true) {
                         IntakePower = -1;
                         LaunchPower = -0.4;
                     } else {
                         IntakePower = 0;
                     }
 
-                    if(gamepad1.right_trigger != 0)
-                        IntakePower =  -gamepad1.right_trigger;
+                    if (gamepad1.right_trigger != 0)
+                        IntakePower = -gamepad1.right_trigger;
 
                     PreviousIntake = RightBumper;
 
                     //End of Intake Code
 
                     //Start of PreShoot Sequence
-                    if (gamepad1.b==true){
+                    if (gamepad1.b == true) {
                         LaunchPower = -0.8;
-                        IntakePower=0.4;
+                        IntakePower = 0.4;
                     }
                     //End of PreShoot Sequence
 
@@ -198,7 +198,7 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
                     ArmBase.setPower(ArmPower);
 
 
-                    if(gamepad1.y) {
+                    if (gamepad1.y) {
                         drive.setPoseEstimate(ShootPose);
                     }
 
@@ -209,22 +209,22 @@ public class MCTOSHINAPInstantPositioning extends LinearOpMode {
 
 
                         // TODO: WOrk on this, try to work out spline to spline heading
-                        if((poseEstimate.getX()>-1.5                                                //If the robot is in front of the line
+                        if ((poseEstimate.getX() > -1.5                                                //If the robot is in front of the line
                                 &&                                                                  //And
-                                ((poseEstimate.getHeading()<(Math.toRadians(90)))                   //It is less than 90deg
+                                ((poseEstimate.getHeading() < (Math.toRadians(90)))                   //It is less than 90deg
                                         ||                                                          //or
-                                        (poseEstimate.getHeading()>(Math.toRadians(270)))))         //greater than 270 deg
-                        ||(poseEstimate.getX()<1.5                                                  //If the robot is behind the line
+                                        (poseEstimate.getHeading() > (Math.toRadians(270)))))         //greater than 270 deg
+                                || (poseEstimate.getX() < 1.5                                                  //If the robot is behind the line
                                 &&                                                                  //and
-                                ((poseEstimate.getHeading()>(Math.toRadians(90)))                   //its heading is greater than 90
+                                ((poseEstimate.getHeading() > (Math.toRadians(90)))                   //its heading is greater than 90
                                         &&                                                          //and
-                                        (poseEstimate.getHeading()<(Math.toRadians(270)))))         //less than 270
+                                        (poseEstimate.getHeading() < (Math.toRadians(270)))))         //less than 270
                         ) {
                             Trajectory BacktoShoot = drive.trajectoryBuilder(poseEstimate, true)   //then drive backwards
-                                    .lineToSplineHeading(new Pose2d(-1.5, -36,Math.toRadians(0)))
+                                    .lineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)))
                                     .build();
                             drive.followTrajectoryAsync(BacktoShoot);
-                        } else{                                                                   //Standard go to point without reverse direction, it is in the else because this is the preferred pattern for unfamiliar cases
+                        } else {                                                                   //Standard go to point without reverse direction, it is in the else because this is the preferred pattern for unfamiliar cases
                             Trajectory ForwardToShoot = drive.trajectoryBuilder(poseEstimate)
                                     .lineToSplineHeading(new Pose2d(-1.5, -36, Math.toRadians(0)))
                                     .build();
